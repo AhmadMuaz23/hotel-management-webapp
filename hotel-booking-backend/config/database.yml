@@ -1,0 +1,22 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+  password: postgres   
+  host: localhost
+  port: 5432
+  pool: 5
+
+development:
+  <<: *default
+  database: hotel_booking_backend_development
+
+test:
+  <<: *default
+  database: hotel_booking_backend_test
+
+production:
+  <<: *default
+  database: hotel_booking_backend_production
+  username: postgres
+  password: postgres

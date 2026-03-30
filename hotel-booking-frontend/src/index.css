@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #fdfbf7;
+    /* Matches brand-50 */
+    color: #38220f;
+    /* Matches brand-600 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: 'Outfit', 'Inter', -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/40 backdrop-blur-xl border border-white/30;
+  }
+
+  .warm-border {
+    @apply border-brand-200/50;
+  }
+}
+
+/* Swiper Customization */
+.swiper-pagination-bullet {
+  @apply bg-brand-300 opacity-100 !important;
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-brand-600 w-8 transition-all duration-300 rounded-full !important;
+}
+
+.swiper-pagination {
+  @apply !static !mt-12 !flex !justify-center !items-center !gap-2 !important;
+}
+
+.nav-btn-prev.swiper-button-disabled,
+.nav-btn-next.swiper-button-disabled {
+  @apply opacity-30 cursor-not-allowed pointer-events-none !important;
+}
+
+/* Hide default swiper buttons if they appear */
+.swiper-button-next,
+.swiper-button-prev {
+  display: none !important;
+}
+
+
+
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
