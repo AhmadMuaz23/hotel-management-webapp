@@ -8,4 +8,8 @@ class Room < ApplicationRecord
   validates :name, presence: true
   validates :capacity, presence: true, numericality: { greater_than: 0 }
   validates :price_per_night, presence: true, numericality: { greater_than: 0 }
+
+  def average_rating
+    reviews.average(:rating).to_f.round(1)
+  end
 end

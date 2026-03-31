@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CalendarIcon, 
   UserGroupIcon, 
@@ -7,8 +7,10 @@ import {
   CreditCardIcon, 
   CheckBadgeIcon, 
   ArrowRightIcon,
-  ShoppingBagIcon
+  ShoppingBagIcon,
+  StarIcon as StarOutline
 } from '@heroicons/react/24/outline';
+import { StarIcon } from '@heroicons/react/24/solid';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
@@ -16,10 +18,12 @@ import { Link } from 'react-router-dom';
 const UserDashboard = () => {
   const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
+  const [userReviews, setUserReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchBookings();
+    fetchUserReviews();
   }, []);
 
   const fetchBookings = async () => {
@@ -29,7 +33,64 @@ const UserDashboard = () => {
     } catch (err) {
       console.error("Error fetching bookings:", err);
     }
-    setLoading(false);
+  };
+
+  const fetchUserReviews = async () => {
+    try {
+      const response = await api.get('/reviews/me');
+      setUserReviews(response.data);
+    } catch (err) {
+      console.error("Error fetching reviews:", err);
+    }
+  };
+
+  const finishLoading = () => setLoading(false);
+  useEffect(() => {
+    if (!loading) return;
+    const timer = setTimeout(finishLoading, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const [reviewingBooking, setReviewingBooking] = useState(null);
+  const [editingReview, setEditingReview] = useState(null);
+  const [reviewData, setReviewData] = useState({ rating: 5, comment: '' });
+  const [reviewMsg, setReviewMsg] = useState({ type: '', text: '' });
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (editingReview) {
+        await api.put(`/reviews/${editingReview.id}`, reviewData);
+      } else {
+        await api.post(`/rooms/${reviewingBooking.room_id}/reviews`, reviewData);
+      }
+      setReviewMsg({ type: 'success', text: editingReview ? 'Review updated!' : 'Insight posted!' });
+      setTimeout(() => {
+        setReviewingBooking(null);
+        setEditingReview(null);
+        setReviewData({ rating: 5, comment: '' });
+        setReviewMsg({ type: '', text: '' });
+        fetchUserReviews();
+      }, 1500);
+    } catch (err) {
+      setReviewMsg({ type: 'error', text: 'Operation failed' });
+    }
+  };
+
+  const handleReviewDelete = async (reviewId) => {
+    if (!window.confirm('Erase this insight?')) return;
+    try {
+      await api.delete(`/reviews/${reviewId}`);
+      fetchUserReviews();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const openEditModal = (review) => {
+    setEditingReview(review);
+    setReviewData({ rating: review.rating, comment: review.comment });
+    setReviewingBooking({ room: review.room });
   };
 
   const getStatusColor = (status) => {
@@ -193,16 +254,118 @@ const UserDashboard = () => {
                       </div>
                     </div>
 
-                    <div className="shrink-0 text-center sm:text-right">
-                      <p className="text-2xl font-display font-black text-brand-500 mb-2">Rs. {parseFloat(booking.total_price).toLocaleString()}</p>
-                      <button className="text-[10px] font-black uppercase tracking-widest text-brand-300 hover:text-brand-500 transition-colors">
-                        View Details
-                      </button>
-                    </div>
                   </motion.div>
                 ))}
               </div>
             )}
+
+            {/* User Reviews Section - Moved to Left Column for better readability */}
+            <div className="bg-white/70 backdrop-blur-md border border-brand-100 rounded-[2.5rem] p-10 shadow-xl shadow-brand-500/5 mt-10">
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="text-2xl font-display font-black text-brand-600 tracking-tight leading-tight uppercase underline decoration-brand-200 decoration-4 underline-offset-8">Your Haven Insights</h3>
+                <p className="text-[10px] font-black text-brand-300 uppercase tracking-widest">{userReviews.length} Shared Experiences</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {userReviews.length === 0 ? (
+                  <div className="col-span-full py-12 text-center bg-brand-50/50 rounded-3xl border border-dashed border-brand-200">
+                    <p className="text-xs font-bold text-brand-300 italic uppercase tracking-widest">No insights shared yet. Your story begins with your first stay.</p>
+                  </div>
+                ) : userReviews.map(rev => (
+                  <motion.div 
+                    key={rev.id} 
+                    whileHover={{ y: -5 }}
+                    className="p-8 bg-white border border-brand-50 rounded-[2.5rem] shadow-sm hover:shadow-xl hover:shadow-brand-500/5 transition-all duration-300"
+                  >
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="space-y-1">
+                        <p className="text-xs font-black text-brand-600 uppercase tracking-wider">{rev.room?.name}</p>
+                        <div className="flex gap-1 text-brand-400">
+                          {[...Array(5)].map((_, i) => (
+                            <StarIcon key={i} className={`h-3 w-3 ${i < rev.rating ? 'text-brand-400' : 'text-brand-100'}`} />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-sm font-bold text-brand-400 italic leading-relaxed mb-6 opacity-80 line-clamp-3">"{rev.comment}"</p>
+                    <div className="flex gap-6 border-t border-brand-50 pt-5">
+                      <button onClick={() => openEditModal(rev)} className="text-[10px] font-black text-brand-500 hover:text-brand-600 uppercase tracking-widest transition-colors">Edit Insight</button>
+                      <button onClick={() => handleReviewDelete(rev.id)} className="text-[10px] font-black text-red-300 hover:text-red-500 uppercase tracking-widest transition-colors">Delete</button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Review Modal Backdrop */}
+            <AnimatePresence>
+              {reviewingBooking && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-50 bg-brand-600/40 backdrop-blur-sm flex items-center justify-center p-4"
+                >
+                   <motion.div 
+                     initial={{ scale: 0.9, y: 20 }}
+                     animate={{ scale: 1, y: 0 }}
+                     className="bg-white w-full max-w-lg rounded-[3rem] p-10 shadow-2xl relative"
+                   >
+                      <button 
+                        onClick={() => setReviewingBooking(null)}
+                        className="absolute top-8 right-8 text-brand-300 hover:text-brand-600 font-bold"
+                      >Close</button>
+
+                      <div className="text-center space-y-4 mb-10">
+                         <h3 className="text-3xl font-display font-black text-brand-600 tracking-tight leading-tight uppercase">Rate Your Sanctuary</h3>
+                         <p className="text-xs font-black text-brand-300 uppercase tracking-widest leading-relaxed">
+                            {reviewingBooking.room?.name || 'Haven Suite'}
+                         </p>
+                      </div>
+
+                      <form onSubmit={handleReviewSubmit} className="space-y-8">
+                         {reviewMsg.text && (
+                           <div className={`p-4 rounded-xl text-[10px] font-black uppercase tracking-widest text-center ${reviewMsg.type === 'success' ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-red-50 text-red-600 border border-red-100'}`}>
+                             {reviewMsg.text}
+                           </div>
+                         )}
+
+                         <div className="flex justify-center gap-4">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <button
+                                key={star}
+                                type="button"
+                                onClick={() => setReviewData({...reviewData, rating: star})}
+                                className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${reviewData.rating >= star ? 'bg-brand-600 text-white shadow-xl' : 'bg-brand-50 text-brand-200'}`}
+                              >
+                                <StarIcon className="h-6 w-6" />
+                              </button>
+                            ))}
+                         </div>
+
+                         <div className="space-y-3">
+                            <label className="text-[10px] font-black text-brand-300 uppercase tracking-widest ml-2 italic">Your Remarks</label>
+                            <textarea 
+                              required
+                              rows="4"
+                              placeholder="Tell us about the textures, the light, the comfort..."
+                              className="w-full bg-brand-50 border border-brand-100 rounded-3xl p-6 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-bold text-brand-600 text-sm italic"
+                              value={reviewData.comment}
+                              onChange={(e) => setReviewData({...reviewData, comment: e.target.value})}
+                            />
+                         </div>
+
+                         <button 
+                           type="submit"
+                           className="w-full bg-brand-600 text-white h-16 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] shadow-xl shadow-brand-600/20 active:scale-95 transition-all"
+                         >
+                           {editingReview ? 'Update Insight' : 'Post Insight'}
+                         </button>
+                      </form>
+                   </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
 
           {/* Sidebar / Quick Actions */}

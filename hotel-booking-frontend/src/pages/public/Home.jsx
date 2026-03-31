@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -12,47 +12,53 @@ import {
   UserIcon,
 } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
+import api from '../../services/api';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-/* ─── Data ─────────────────────────────────────────────────── */
-const featuredRooms = [
-  {
-    id: 1,
-    name: 'Haven Elite',
-    category: 'Elite',
-    price: '40,000',
-    image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 2,
-    name: 'Haven Couple',
-    category: 'Couple',
-    price: '15,000',
-    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 3,
-    name: 'Haven Solo',
-    category: 'Solo',
-    price: '10,000',
-    image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 4,
-    name: 'Haven Family',
-    category: 'Family',
-    price: '20,000',
-    image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80',
-  },
-];
+/* ─── Category images (fallback per category) ──────────────── */
+const categoryImages = {
+  presidential: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=80',
+  couple:       'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80',
+  single:       'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=900&q=80',
+  family:       'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80',
+};
+
+const categoryLabels = {
+  single: 'Solo',
+  couple: 'Couple',
+  family: 'Family',
+  presidential: 'Elite',
+};
 
 /* ─── Page ──────────────────────────────────────────────────── */
 const Home = () => {
-  // Refs for navigation buttons so Swiper mounts cleanly
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+  const [featuredRooms, setFeaturedRooms] = useState([]);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        const res = await api.get('/rooms');
+        const rooms = res.data;
+        // Pick one room per category for variety
+        const seen = {};
+        const picked = [];
+        for (const room of rooms) {
+          if (!seen[room.category]) {
+            seen[room.category] = true;
+            picked.push(room);
+          }
+        }
+        setFeaturedRooms(picked.length > 0 ? picked : rooms.slice(0, 4));
+      } catch (err) {
+        console.error('Failed to fetch rooms:', err);
+      }
+    };
+    fetchRooms();
+  }, []);
 
   return (
     <div className="overflow-hidden bg-brand-50">
@@ -313,47 +319,51 @@ const InfoBox = ({ icon, title, desc }) => (
   </div>
 );
 
-const StayCard = ({ room }) => (
-  <Link to={`/rooms/${room.id}`} className="group block focus:outline-none">
-    {/* Image box — thin earthy border, ultra-rounded */}
-    <div className="relative rounded-[3.5rem] overflow-hidden mb-8 aspect-[5/6] border border-brand-100 shadow-xl shadow-brand-500/5 bg-brand-50">
-      <img
-        src={room.image}
-        alt={room.name}
-        loading="lazy"
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s]"
-      />
-      {/* Category badge */}
-      <div className="absolute top-6 left-6 z-10">
-        <span className="bg-white/80 backdrop-blur-md px-5 py-2 rounded-2xl text-[9px] font-black text-brand-600 uppercase tracking-[0.2em] shadow-sm border border-white/40">
-          {room.category}
-        </span>
-      </div>
-    </div>
+const StayCard = ({ room }) => {
+  const image = categoryImages[room.category] || categoryImages.single;
+  const label = categoryLabels[room.category] || room.category;
+  const price = Number(room.price_per_night).toLocaleString();
 
-    {/* Card text */}
-    <div className="px-6 space-y-4">
-      <div className="flex flex-col gap-1">
-        <h3 className="text-2xl font-black text-brand-600 group-hover:text-brand-400 transition-colors leading-tight uppercase tracking-tight">
-          {room.name}
-        </h3>
-        <div className="flex items-center gap-2">
-           <div className="w-1.5 h-1.5 rounded-full bg-brand-200" />
-           <span className="text-[10px] font-black text-brand-300 uppercase tracking-widest leading-none">Verified Sanctuary</span>
+  return (
+    <Link to={`/rooms/${room.id}`} className="group block focus:outline-none">
+      {/* Image box */}
+      <div className="relative rounded-[3.5rem] overflow-hidden mb-8 aspect-[5/6] border border-brand-100 shadow-xl shadow-brand-500/5 bg-brand-50">
+        <img
+          src={image}
+          alt={room.name}
+          loading="lazy"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s]"
+        />
+        <div className="absolute top-6 left-6 z-10">
+          <span className="bg-white/80 backdrop-blur-md px-5 py-2 rounded-2xl text-[9px] font-black text-brand-600 uppercase tracking-[0.2em] shadow-sm border border-white/40">
+            {label}
+          </span>
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-brand-50">
-        <div className="flex items-baseline gap-1">
-          <span className="text-2xl font-black text-brand-600 italic font-display">Rs.{room.price}</span>
-          <span className="text-[9px] font-black text-brand-300 uppercase tracking-widest">/ night</span>
+      <div className="px-6 space-y-4">
+        <div className="flex flex-col gap-1">
+          <h3 className="text-2xl font-black text-brand-600 group-hover:text-brand-400 transition-colors leading-tight uppercase tracking-tight">
+            {room.name}
+          </h3>
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-brand-200" />
+            <span className="text-[10px] font-black text-brand-300 uppercase tracking-widest leading-none">Verified Sanctuary</span>
+          </div>
         </div>
-        <div className="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-300 group-hover:bg-brand-600 group-hover:text-white transition-all">
-           <span className="text-xl">→</span>
+
+        <div className="flex items-center justify-between pt-2 border-t border-brand-50">
+          <div className="flex items-baseline gap-1">
+            <span className="text-2xl font-black text-brand-600 italic font-display">Rs.{price}</span>
+            <span className="text-[9px] font-black text-brand-300 uppercase tracking-widest">/ night</span>
+          </div>
+          <div className="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-300 group-hover:bg-brand-600 group-hover:text-white transition-all">
+            <span className="text-xl">→</span>
+          </div>
         </div>
       </div>
-    </div>
-  </Link>
-);
+    </Link>
+  );
+};
 
 export default Home;

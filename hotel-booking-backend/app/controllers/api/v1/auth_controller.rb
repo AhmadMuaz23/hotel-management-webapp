@@ -25,7 +25,7 @@ module Api
 
         if user && user.verification_code == params[:code]
           user.update(verified: true, verification_code: nil)
-          token = JsonWebToken.encode(user_id: user.id)
+          token = JsonWebToken.encode_with_role(user)
           render json: { message: 'Email verified successfully', user: user_data(user), token: token }, status: :ok
         else
           render json: { errors: 'Invalid or expired verification code' }, status: :unprocessable_entity
@@ -53,13 +53,8 @@ module Api
             render json: { errors: 'Your account has been blocked.' }, status: :forbidden
             return
           end
-
-          unless user.verified
-            render json: { errors: 'Please verify your email address.', unverified: true, email: user.email }, status: :forbidden
-            return
-          end
           
-          token = JsonWebToken.encode(user_id: user.id)
+          token = JsonWebToken.encode_with_role(user)
           render json: { user: user_data(user), token: token }, status: :ok
         else
           render json: { errors: 'Invalid email or password' }, status: :unauthorized

@@ -10,8 +10,10 @@ import {
   WifiIcon,
   TvIcon,
   BeakerIcon,
-  CalendarDaysIcon
+  CalendarDaysIcon,
+  StarIcon
 } from '@heroicons/react/24/solid';
+import { StarIcon as StarOutline } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const RoomDetail = () => {
@@ -134,7 +136,15 @@ const RoomDetail = () => {
               className="space-y-8"
             >
               <div className="space-y-4">
-                <h1 className="text-5xl md:text-7xl font-black text-brand-600 tracking-tighter leading-none">{room.name}</h1>
+                <div className="flex items-center gap-4">
+                  <h1 className="text-5xl md:text-7xl font-black text-brand-600 tracking-tighter leading-none">{room.name}</h1>
+                  {room.average_rating > 0 && (
+                    <div className="flex items-center gap-2 px-4 py-2 bg-brand-600 rounded-2xl text-white shadow-xl shadow-brand-600/20">
+                      <StarIcon className="h-4 w-4 text-brand-200" />
+                      <span className="text-sm font-black italic">{room.average_rating}</span>
+                    </div>
+                  )}
+                </div>
                 <div className="flex items-center gap-6">
                    <div className="flex items-center gap-2 px-4 py-2 bg-brand-100 rounded-full text-brand-600">
                       <UserGroupIcon className="h-4 w-4" />
@@ -186,9 +196,17 @@ const RoomDetail = () => {
                        <div className="flex justify-between items-center">
                           <div className="flex items-center gap-3">
                              <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center font-black text-brand-600 text-xs italic">
-                                {rev.user.name.charAt(0)}
+                                {rev.user?.name?.charAt(0) || 'G'}
                              </div>
-                             <span className="font-black text-brand-600 text-sm uppercase tracking-tight">{rev.user.name}</span>
+                             <span className="font-black text-brand-600 text-sm uppercase tracking-tight">{rev.user?.name || 'Guest'}</span>
+                          </div>
+                          <div className="flex gap-0.5">
+                            {[...Array(5)].map((_, starIdx) => (
+                              <StarIcon 
+                                key={starIdx} 
+                                className={`h-3 w-3 ${starIdx < rev.rating ? 'text-brand-400' : 'text-brand-100'}`} 
+                              />
+                            ))}
                           </div>
                        </div>
                        <p className="text-brand-500/70 font-bold text-sm leading-relaxed italic">"{rev.comment}"</p>

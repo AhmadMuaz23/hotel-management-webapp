@@ -23,6 +23,35 @@ module Api
           render json: { errors: review.errors.full_messages }, status: :unprocessable_entity
         end
       end
+
+      # GET /api/v1/reviews/me
+      def my_reviews
+        reviews = @current_user.reviews.as_json(include: { room: { only: [:id, :name] } })
+        render json: reviews
+      end
+
+      # PATCH/PUT /api/v1/reviews/:id
+      def update
+        review = @current_user.reviews.find(params[:id])
+        if review.update(review_params)
+          render json: review
+        else
+          render json: { errors: review.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
+
+      # DELETE /api/v1/reviews/:id
+      def destroy
+        review = @current_user.reviews.find(params[:id])
+        review.destroy
+        head :no_content
+      end
+
+      private
+
+      def review_params
+        params.permit(:rating, :comment)
+      end
     end
   end
 end

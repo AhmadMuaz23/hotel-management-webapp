@@ -15,11 +15,7 @@ const Login = () => {
       await login(email, password);
       navigate('/');
     } catch (err) {
-      if (err.response?.data?.unverified) {
-        navigate('/verify-email', { state: { email: err.response.data.email } });
-      } else {
-        setError(err.response?.data?.errors || 'Login failed');
-      }
+      setError(err.response?.data?.errors || 'Login failed');
     }
   };
 
@@ -72,6 +68,11 @@ const Login = () => {
             </button>
           </div>
         </form>
+        <div className="mt-4 text-center">
+          <Link to="/admin/login" className="text-xs font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest transition-colors">
+            Admin Portal →
+          </Link>
+        </div>
       </div>
     </div>
   );

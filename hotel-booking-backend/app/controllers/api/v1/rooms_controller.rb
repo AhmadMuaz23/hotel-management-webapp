@@ -17,8 +17,7 @@ module Api
 
       # GET /api/v1/rooms/1
       def show
-        File.open("c:/Users/hp/Desktop/Hotel-Management/hotel-booking-backend/debug.log", "a") { |f| f.puts "[#{Time.now}] GET /rooms/#{params[:id]}" }
-        render json: @room.as_json(include: :reviews)
+        render json: @room.as_json(methods: :average_rating, include: { reviews: { include: { user: { only: :name } } } })
       end
 
       # POST /api/v1/rooms

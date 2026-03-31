@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to={adminOnly ? '/admin/login' : '/login'} />;
   }
 
   if (adminOnly && user.role !== 'admin') {

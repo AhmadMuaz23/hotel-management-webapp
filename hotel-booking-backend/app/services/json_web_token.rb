@@ -12,4 +12,9 @@ class JsonWebToken
   rescue JWT::ExpiredSignature, JWT::DecodeError => e
     nil
   end
+
+  # Encode with user role included for role-based JWT validation
+  def self.encode_with_role(user)
+    encode(user_id: user.id, role: user.role)
+  end
 end

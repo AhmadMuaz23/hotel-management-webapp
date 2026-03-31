@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       resources :rooms do
         resources :reviews, only: [:index, :create]
       end
+      get '/reviews/me', to: 'reviews#my_reviews'
+      resources :reviews, only: [:update, :destroy]
       
       # Bookings
       resources :bookings, only: [:index, :show, :create, :destroy] do
@@ -29,7 +31,8 @@ Rails.application.routes.draw do
         end
       end
       
-      get '/admin/dashboard', to: 'admin#dashboard'
+      post '/admin/login',     to: 'admin#login'
+      get  '/admin/dashboard', to: 'admin#dashboard'
     end
   end
 

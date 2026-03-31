@@ -8,6 +8,7 @@ import Contact from './pages/public/Contact';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import VerifyEmail from './pages/auth/VerifyEmail';
+import AdminLogin from './pages/auth/AdminLogin';
 import UserDashboard from './pages/user/UserDashboard';
 import AdminLayout from './components/layout/AdminLayout';
 import AdminOverview from './pages/admin/AdminOverview';
@@ -36,6 +37,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <UserDashboard />
