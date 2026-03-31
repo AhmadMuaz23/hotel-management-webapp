@@ -17,6 +17,6 @@ test:
 
 production:
   <<: *default
-  database: hotel_booking_backend_production
-  username: postgres
-  password: postgres
+  url: <%= ENV['DATABASE_URL'] %>
+  # Render already provides this, but we want to make it explicit.
+  adapter: postgresql
