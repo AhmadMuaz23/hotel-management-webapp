@@ -196,7 +196,7 @@ const InputGroup = ({ label, type, placeholder, value, onChange }) => (
       type={type}
       required
       placeholder={placeholder}
-      className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] uppercase tracking-widest italic placeholder:text-brand-200"
+      className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] tracking-widest italic placeholder:text-brand-200"
       value={value}
       autoComplete="new-password"
       onChange={(e) => onChange(e.target.value)}

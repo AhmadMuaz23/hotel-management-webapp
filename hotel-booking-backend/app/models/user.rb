@@ -13,15 +13,15 @@ class User < ApplicationRecord
 
   before_create :set_default_balance
 
-  private
-
-  def set_default_balance
-    self.balance ||= 250000.0
-  end
-
   def generate_verification_code
     self.verification_code = sprintf('%06d', rand(10**6))
     self.verification_code_sent_at = Time.current
     save(validate: false)
+  end
+
+  private
+
+  def set_default_balance
+    self.balance ||= 500000.0
   end
 end

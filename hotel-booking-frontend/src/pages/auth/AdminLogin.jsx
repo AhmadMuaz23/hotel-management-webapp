@@ -101,10 +101,10 @@ const AdminLogin = () => {
                 id="admin-email"
                 type="email"
                 required
-                className="w-full px-6 py-4 rounded-[1.5rem] text-[11px] font-black text-brand-50 placeholder-brand-300/20 border border-white/10 focus:outline-none focus:bg-white/[0.05] focus:border-brand-500/50 transition-all duration-500 uppercase tracking-widest italic bg-white/[0.02]"
+                className="w-full px-6 py-4 rounded-[1.5rem] text-[11px] font-black text-brand-50 placeholder-brand-300/20 border border-white/10 focus:outline-none focus:bg-white/[0.05] focus:border-brand-500/50 transition-all duration-500 tracking-widest italic bg-white/[0.02]"
                 value={email}
                 autoComplete="off"
-                placeholder="ADMIN@HAVEN.COM"
+                placeholder="admin@haven.com"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>

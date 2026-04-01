@@ -4,7 +4,7 @@ import {
   UsersIcon, 
   HomeModernIcon, 
   ClipboardDocumentCheckIcon, 
-  CurrencyDollarIcon,
+  BanknotesIcon,
   ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
@@ -80,7 +80,7 @@ const AdminOverview = () => {
         <StatCard 
           title="Total Revenue" 
           value={`Rs. ${(stats?.total_revenue || 0).toLocaleString()}`} 
-          icon={<CurrencyDollarIcon className="w-6 h-6" />}
+          icon={<BanknotesIcon className="w-6 h-6" />}
           delay={0.4}
         />
       </div>

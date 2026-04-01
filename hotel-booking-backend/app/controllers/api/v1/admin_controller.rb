@@ -33,7 +33,9 @@ module Api
       def dashboard
         total_users = User.count
         total_rooms = Room.count
-        active_bookings = Booking.where(status: 'approved').count
+        active_bookings = Booking.where(status: 'approved')
+                         .where('check_in <= ? AND check_out >= ?', Date.current, Date.current)
+                         .count
         pending_reviews = Review.count
         
         revenue = Booking.where(status: 'approved').sum(:total_price)

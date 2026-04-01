@@ -75,7 +75,7 @@ const Login = () => {
                 type="email"
                 required
                 placeholder="Ex: sanctuary@haven.com"
-                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] uppercase tracking-widest italic placeholder:text-brand-200"
+                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] tracking-widest italic placeholder:text-brand-200"
                 value={email}
                 autoComplete="off"
                 onChange={(e) => setEmail(e.target.value)}
@@ -93,7 +93,7 @@ const Login = () => {
                 type="password"
                 required
                 placeholder="••••••••"
-                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] uppercase tracking-widest italic tracking-[0.5em] placeholder:tracking-widest placeholder:text-brand-200"
+                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] tracking-widest italic tracking-[0.5em] placeholder:tracking-widest placeholder:text-brand-200"
                 value={password}
                 autoComplete="new-password"
                 onChange={(e) => setPassword(e.target.value)}
