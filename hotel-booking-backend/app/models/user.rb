@@ -11,6 +11,14 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, presence: true, length: { minimum: 6 }, if: -> { new_record? || !password.nil? }
 
+  before_create :set_default_balance
+
+  private
+
+  def set_default_balance
+    self.balance ||= 250000.0
+  end
+
   def generate_verification_code
     self.verification_code = sprintf('%06d', rand(10**6))
     self.verification_code_sent_at = Time.current

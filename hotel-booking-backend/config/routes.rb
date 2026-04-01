@@ -8,6 +8,11 @@ Rails.application.routes.draw do
       post '/auth/verify_email', to: 'auth#verify_email'
       post '/auth/resend_code',  to: 'auth#resend_code'
       
+      # Password Recovery
+      post '/passwords/forgot', to: 'passwords#forgot'
+      post '/passwords/reset',  to: 'passwords#reset'
+      
+      
       # Rooms & Reviews
       resources :rooms do
         resources :reviews, only: [:index, :create]

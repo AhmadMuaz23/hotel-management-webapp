@@ -167,26 +167,33 @@ const UserDashboard = () => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-16"
         >
           <StatCard 
             title="Total Memories" 
             value={totalBookings} 
-            icon={<ShoppingBagIcon className="h-7 w-7" />} 
+            icon={<ShoppingBagIcon className="h-6 w-6" />} 
             label="Bookings so far"
+            variants={itemVariants}
+          />
+          <StatCard 
+            title="Haven Wallet" 
+            value={`Rs. ${(parseFloat(user?.balance) || 0).toLocaleString()}`} 
+            icon={<CreditCardIcon className="h-6 w-6" />} 
+            label="Available Balance"
             variants={itemVariants}
           />
           <StatCard 
             title="Active Stays" 
             value={activeReservations} 
-            icon={<CalendarIcon className="h-7 w-7" />} 
+            icon={<CalendarIcon className="h-6 w-6" />} 
             label="Upcoming visits"
             variants={itemVariants}
           />
           <StatCard 
             title="Haven Investment" 
             value={`Rs. ${totalSpent.toLocaleString()}`} 
-            icon={<CreditCardIcon className="h-7 w-7" />} 
+            icon={<CheckBadgeIcon className="h-6 w-6" />} 
             label="Total Amount"
             variants={itemVariants}
           />

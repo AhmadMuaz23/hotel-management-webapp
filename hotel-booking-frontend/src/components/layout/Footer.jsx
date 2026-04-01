@@ -162,15 +162,15 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom Bar — Premium Finish */}
       <div className="border-t border-brand-200/50 bg-brand-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[10px] font-black text-brand-400 uppercase tracking-widest">
-            &copy; {new Date().getFullYear()} HavenHotels. All rights reserved.
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-[10px] font-black text-brand-400 uppercase tracking-[0.3em] text-center md:text-left">
+            &copy; {new Date().getFullYear()} <span className="text-brand-600">HavenHotels.</span> All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
-              <a key={item} href="#" className="text-[10px] font-black text-brand-400 uppercase tracking-widest hover:text-brand-600 transition-colors">
+          <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4">
+            {['Privacy', 'Terms', 'Cookies'].map((item) => (
+              <a key={item} href="#" className="text-[10px] font-black text-brand-400 uppercase tracking-[0.3em] hover:text-brand-600 transition-colors">
                 {item}
               </a>
             ))}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -20,62 +21,111 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-blue-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl shadow-blue-100 border border-blue-100">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-900">Welcome Back</h2>
-          <p className="mt-2 text-center text-sm text-slate-600">
+    <div className="min-h-screen flex items-center justify-center bg-brand-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] bg-brand-200/20 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[500px] h-[500px] bg-brand-100/30 rounded-full blur-[100px]" />
+
+      <motion.div 
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="max-w-md w-full space-y-10 bg-white/90 backdrop-blur-2xl p-8 sm:p-12 rounded-[3.5rem] shadow-[0_40px_100px_-20px_rgba(56,34,15,0.08)] border border-brand-100/50 hover:shadow-2xl hover:shadow-brand-500/10 transition-all duration-500 relative z-10"
+      >
+        <div className="text-center space-y-4">
+          <motion.h2 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-4xl sm:text-5xl font-black text-brand-600 tracking-tighter leading-none uppercase italic"
+          >
+            Haven <span className="block text-brand-300 not-italic font-black text-2xl tracking-[0.2em] mt-2 group-hover:tracking-[0.3em] transition-all">Portal</span>
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="text-[10px] font-black text-brand-300 uppercase tracking-[0.25em] italic"
+          >
             Or{' '}
-            <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
-              create a new account
+            <Link to="/register" className="text-brand-600 hover:text-brand-500 underline decoration-brand-200 underline-offset-4 decoration-2 transition-all">
+              Initiate Registration
             </Link>
-          </p>
+          </motion.p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium">{error}</div>}
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label className="text-xs font-bold text-slate-500 uppercase">Email Address</label>
+
+        <form className="space-y-8" onSubmit={handleSubmit}>
+          <AnimatePresence>
+            {error && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="bg-red-50 text-red-600 p-4 rounded-2xl text-[9px] font-black uppercase tracking-widest text-center border border-red-100 italic shadow-sm"
+              >
+                {error}
+              </motion.div>
+            )}
+          </AnimatePresence>
+          
+          <div className="space-y-6">
+            <div className="space-y-2 group">
+              <label className="text-[9px] font-black text-brand-300 uppercase tracking-widest ml-4 italic group-focus-within:text-brand-600 transition-colors">Resident Email</label>
               <input
                 type="email"
                 required
-                className="appearance-none rounded-xl relative block w-full px-4 py-3 border border-slate-200 placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition sm:text-sm bg-slate-50"
+                placeholder="Ex: sanctuary@haven.com"
+                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] uppercase tracking-widest italic placeholder:text-brand-200"
                 value={email}
                 autoComplete="off"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div>
-              <label className="text-xs font-bold text-slate-500 uppercase">Password</label>
+
+            <div className="space-y-2 group">
+              <div className="flex justify-between items-center px-4">
+                <label className="text-[9px] font-black text-brand-300 uppercase tracking-widest italic group-focus-within:text-brand-600 transition-colors">Access Code</label>
+                <Link to="/forgot-password" size="sm" className="text-[8px] font-black text-brand-200 hover:text-brand-600 uppercase tracking-widest transition-colors">
+                   Lost Key?
+                </Link>
+              </div>
               <input
                 type="password"
                 required
-                className="appearance-none rounded-xl relative block w-full px-4 py-3 border border-slate-200 placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition sm:text-sm bg-slate-50"
+                placeholder="••••••••"
+                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] uppercase tracking-widest italic tracking-[0.5em] placeholder:tracking-widest placeholder:text-brand-200"
                 value={password}
-                autoComplete="off"
-                placeholder="********"
+                autoComplete="new-password"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
 
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all shadow-lg shadow-blue-200"
-            >
-              Log in
-            </button>
-          </div>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            type="submit"
+            className="group relative w-full h-16 rounded-[2rem] overflow-hidden shadow-2xl shadow-brand-500/20"
+          >
+            <div className="absolute inset-0 bg-brand-600 group-hover:bg-brand-500 transition-colors duration-500" />
+            <span className="relative z-10 text-white font-black text-[10px] uppercase tracking-[0.5em] italic">Open Sanctuary</span>
+          </motion.button>
         </form>
-        <div className="mt-4 text-center">
-          <Link to="/admin/login" className="text-xs font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest transition-colors">
-            Admin Portal →
+
+        <div className="text-center pt-8 border-t border-brand-50/50">
+          <Link to="/admin/login" className="text-[9px] font-black text-brand-200 hover:text-brand-400 uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-2 group">
+            Sanctuary Admin Gateway <span className="text-lg group-hover:translate-x-2 transition-transform">→</span>
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
 
+// Internal AnimatePresence wrapper for cleaner code
+const AnimatePresence = ({ children }) => {
+  return <>{children}</>;
+};
+
 export default Login;
+

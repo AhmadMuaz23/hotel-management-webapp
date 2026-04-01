@@ -64,84 +64,93 @@ const Home = () => {
     <div className="overflow-hidden bg-brand-50">
 
       {/* ── Hero ───────────────────────────────────────────────── */}
-      <section className="relative h-[85vh] min-h-[650px] flex items-center pt-20 px-4">
+      <section className="relative h-[85vh] min-h-[600px] flex items-center pt-24 px-4 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=80"
             alt="Warm Interior"
-            className="w-full h-full object-cover brightness-[0.85]"
+            className="w-full h-full object-cover brightness-[0.85] scale-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-100/80 via-brand-100/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-100/90 via-brand-100/40 to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto w-full">
+        <div className="relative z-10 max-w-7xl mx-auto w-full px-4 md:px-0">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1 }}
-            className="max-w-3xl space-y-8"
+            className="max-w-3xl space-y-4 md:space-y-8"
           >
             <div className="flex items-center gap-3">
-              <div className="h-[1px] w-12 bg-brand-400" />
-              <span className="text-brand-500 text-xs font-black uppercase tracking-[0.4em]">Est. 1998</span>
+              <div className="h-[1px] w-8 md:w-12 bg-brand-400" />
+              <span className="text-brand-500 text-[10px] md:text-xs font-black uppercase tracking-[0.4em]">Est. 1998</span>
             </div>
 
-            <h1 className="text-6xl md:text-8xl font-black text-brand-600 leading-[1.1] tracking-tighter">
+            <h1 className="text-4xl xs:text-5xl md:text-8xl font-black text-brand-600 leading-[1.1] tracking-tighter">
               Authentic <br />
               <span className="text-brand-400 italic font-medium">Warmth</span> &{' '}
               <br />
               Comfort
             </h1>
 
-            <p className="text-lg text-brand-500/80 max-w-lg font-bold leading-relaxed">
+            <p className="text-sm md:text-lg text-brand-500/80 max-w-sm md:max-w-lg font-bold leading-relaxed">
               Step into a sanctuary of earthy tones and natural textures. HavenHotels offers a
               unique stay that feels like home, only better.
             </p>
+
+            <div className="pt-4 flex flex-col sm:flex-row gap-4">
+               <Link to="/rooms" className="px-10 py-4 bg-brand-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-brand-600/30 text-center">
+                 Explore Suites
+               </Link>
+               <Link to="/register" className="px-10 py-4 bg-white/50 backdrop-blur-md border border-brand-200 text-brand-600 rounded-2xl font-black text-[10px] uppercase tracking-widest text-center">
+                 Join Haven
+               </Link>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* ── Philosophy ─────────────────────────────────────────── */}
-      <section className="py-32 bg-brand-50 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-            <div className="col-span-1 space-y-6">
-              <h2 className="text-xs font-black text-brand-400 tracking-[0.3em] uppercase">
+      <section className="py-20 md:py-32 bg-brand-50 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16">
+            <div className="col-span-1 space-y-4 md:space-y-6">
+              <h2 className="text-[10px] font-black text-brand-400 tracking-[0.3em] uppercase">
                 Our Philosophy
               </h2>
-              <p className="text-4xl font-black text-brand-600 leading-tight">
+              <p className="text-2xl md:text-4xl font-black text-brand-600 leading-tight">
                 Grounded in Nature's Beauty
               </p>
-              <div className="h-1 w-20 bg-brand-200 rounded-full" />
+              <div className="h-1 w-12 md:w-20 bg-brand-200 rounded-full" />
             </div>
-            <div className="col-span-1 md:col-span-2 text-lg text-brand-500 font-bold leading-relaxed opacity-80">
+            <div className="col-span-1 md:col-span-2 text-sm md:text-lg text-brand-500 font-bold leading-relaxed opacity-80">
               We believe luxury shouldn't be cold. Inspired by the soft hues of desert sands and
               aged oak, our spaces are designed to calm the mind and soothe the soul. Every detail
               is handpicked to provide a textured, organic experience.
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-20">
-            <InfoBox icon={<SparklesIcon className="h-8 w-8" />} title="Organic Textures" desc="Natural linen, solid wood, and stone finishes in every room." />
-            <InfoBox icon={<KeyIcon className="h-8 w-8" />} title="Private Access" desc="Disguised entrances and private gardens for ultimate solitude." />
-            <InfoBox icon={<ShieldCheckIcon className="h-8 w-8" />} title="Pure Comfort" desc="Eco-friendly climate control and soundproofing for deep rest." />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12 mt-16 md:mt-20">
+            <InfoBox icon={<SparklesIcon className="h-7 w-7 md:h-8 md:w-8" />} title="Organic Textures" desc="Natural linen, solid wood, and stone finishes in every room." />
+            <InfoBox icon={<KeyIcon className="h-7 w-7 md:h-8 md:w-8" />} title="Private Access" desc="Disguised entrances and private gardens for ultimate solitude." />
+            <InfoBox icon={<ShieldCheckIcon className="h-7 w-7 md:h-8 md:w-8" />} title="Pure Comfort" desc="Eco-friendly climate control and soundproofing for deep rest." />
           </div>
         </div>
       </section>
 
       {/* ── Featured Rooms Slider ──────────────────────────────── */}
-      <section className="py-24 bg-brand-100">
+      <section className="py-20 md:py-24 bg-brand-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
           {/* Section header */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-14">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12 md:mb-14">
             <div className="space-y-3">
-              <p className="text-xs font-black text-brand-400 tracking-[0.3em] uppercase">Selected Stays</p>
-              <h2 className="text-4xl md:text-5xl font-black text-brand-600">The Comfort Collection</h2>
+              <p className="text-[10px] font-black text-brand-400 tracking-[0.3em] uppercase">Selected Stays</p>
+              <h2 className="text-3xl md:text-5xl font-black text-brand-600">The Comfort Collection</h2>
             </div>
             <Link
               to="/rooms"
-              className="group flex items-center gap-3 border-b-2 border-brand-300 pb-1 font-black text-xs uppercase tracking-[0.2em] text-brand-600 hover:text-brand-400 hover:border-brand-400 transition-all"
+              className="group flex items-center gap-3 border-b-2 border-brand-300 pb-1 font-black text-[10px] md:text-xs uppercase tracking-[0.2em] text-brand-600 hover:text-brand-400 hover:border-brand-400 transition-all"
             >
               Explore All Stays
               <ArrowRightIcon className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -149,15 +158,15 @@ const Home = () => {
           </div>
 
           {/* Slider wrapper — side padding creates gutters for buttons */}
-          <div className="relative px-16">
+          <div className="relative px-0 md:px-16">
 
             {/* Prev — absolute in left gutter, centered on card IMAGE (≈38% from top) */}
             <button
               ref={prevRef}
               aria-label="Previous"
-              className="absolute left-0 top-[38%] -translate-y-1/2 z-20
+              className="hidden md:flex absolute left-0 top-[38%] -translate-y-1/2 z-20
                          w-12 h-12 rounded-2xl bg-white border border-brand-200 shadow-md
-                         flex items-center justify-center
+                         items-center justify-center
                          hover:bg-brand-600 hover:border-brand-600 hover:text-white
                          text-brand-600 transition-all duration-300 hover:scale-105 active:scale-95"
             >
@@ -168,9 +177,9 @@ const Home = () => {
             <button
               ref={nextRef}
               aria-label="Next"
-              className="absolute right-0 top-[38%] -translate-y-1/2 z-20
+              className="hidden md:flex absolute right-0 top-[38%] -translate-y-1/2 z-20
                          w-12 h-12 rounded-2xl bg-white border border-brand-200 shadow-md
-                         flex items-center justify-center
+                         items-center justify-center
                          hover:bg-brand-600 hover:border-brand-600 hover:text-white
                          text-brand-600 transition-all duration-300 hover:scale-105 active:scale-95"
             >

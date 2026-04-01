@@ -109,21 +109,21 @@ const RoomDetail = () => {
           <span className="group-hover:-translate-x-1 transition-transform">←</span> Return to Sanctuary
         </motion.button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-start">
           {/* ── Left Content: Visuals & Story ─────────────────────── */}
-          <div className="lg:col-span-8 space-y-16">
+          <div className="lg:col-span-8 space-y-12 md:space-y-16">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              className="relative rounded-[4rem] overflow-hidden shadow-[0_50px_100px_-30px_rgba(0,0,0,0.2)] aspect-video border border-brand-100"
+              className="relative rounded-[3rem] md:rounded-[4rem] overflow-hidden shadow-[0_50px_100px_-30px_rgba(0,0,0,0.2)] aspect-video border border-brand-100"
             >
               <img 
                 src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" 
                 alt={room.name} 
                 className="w-full h-full object-cover" 
               />
-              <div className="absolute top-8 left-8">
-                <div className="bg-white/80 backdrop-blur-xl px-6 py-2.5 rounded-2xl text-[10px] font-black text-brand-600 uppercase tracking-widest border border-white/50 shadow-2xl">
+              <div className="absolute top-6 left-6 md:top-8 md:left-8">
+                <div className="bg-white/80 backdrop-blur-xl px-4 py-2 md:px-6 md:py-2.5 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black text-brand-600 uppercase tracking-widest border border-white/50 shadow-2xl">
                   {room.category.replace('_', ' ')}
                 </div>
               </div>
@@ -133,13 +133,13 @@ const RoomDetail = () => {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="space-y-8"
+              className="space-y-6 md:space-y-8"
             >
               <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <h1 className="text-5xl md:text-7xl font-black text-brand-600 tracking-tighter leading-none">{room.name}</h1>
+                <div className="flex flex-col md:flex-row md:items-center gap-4">
+                  <h1 className="text-4xl md:text-7xl font-black text-brand-600 tracking-tighter leading-none uppercase">{room.name}</h1>
                   {room.average_rating > 0 && (
-                    <div className="flex items-center gap-2 px-4 py-2 bg-brand-600 rounded-2xl text-white shadow-xl shadow-brand-600/20">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-600 rounded-2xl text-white shadow-xl shadow-brand-600/20 w-fit">
                       <StarIcon className="h-4 w-4 text-brand-200" />
                       <span className="text-sm font-black italic">{room.average_rating}</span>
                     </div>
@@ -153,36 +153,36 @@ const RoomDetail = () => {
                 </div>
               </div>
 
-              <div className="prose prose-lg max-w-none text-brand-500/80 font-bold leading-relaxed italic border-l-4 border-brand-200 pl-8">
+              <div className="prose prose-lg max-w-none text-brand-500/80 font-bold leading-relaxed italic border-l-4 border-brand-200 pl-6 md:pl-8">
                 "{room.description}"
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-10 border-y border-brand-100">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 py-8 md:py-10 border-y border-brand-100">
                 {amenities.map(item => (
                   <div key={item.name} className="flex items-center gap-4 group">
-                    <div className="w-12 h-12 rounded-2xl bg-white border border-brand-100 flex items-center justify-center text-brand-400 group-hover:bg-brand-600 group-hover:text-white transition-all">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-white border border-brand-100 flex items-center justify-center text-brand-400 group-hover:bg-brand-600 group-hover:text-white transition-all">
                       {item.icon}
                     </div>
-                    <span className="text-xs font-black text-brand-600 uppercase tracking-widest">{item.name}</span>
+                    <span className="text-[10px] md:text-xs font-black text-brand-600 uppercase tracking-widest">{item.name}</span>
                   </div>
                 ))}
               </div>
             </motion.div>
 
             {/* ── Reviews Grid ────────────────────────────────────────── */}
-            <div className="space-y-12">
+            <div className="space-y-8 md:space-y-12">
                <div className="flex items-end justify-between">
                   <div className="space-y-2">
-                    <h2 className="text-3xl font-black text-brand-600 tracking-tight leading-tight uppercase">Guest Insights</h2>
+                    <h2 className="text-2xl md:text-3xl font-black text-brand-600 tracking-tight leading-tight uppercase">Guest Insights</h2>
                     <div className="h-1 w-12 bg-brand-200 rounded-full" />
                   </div>
-                  <span className="text-[10px] font-black text-brand-300 uppercase tracking-[0.3em] pb-1">{reviews.length} Verified Reviews</span>
+                  <span className="text-[9px] md:text-[10px] font-black text-brand-300 uppercase tracking-[0.3em] pb-1">{reviews.length} Insights</span>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                   {reviews.length === 0 ? (
                     <div className="col-span-full py-10 bg-white rounded-3xl border border-dashed border-brand-200 text-center text-brand-300">
-                      <p className="text-sm font-bold uppercase tracking-widest italic">Be the first to share your experience</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest italic px-4">Be the first to share your experience</p>
                     </div>
                   ) : reviews.map((rev, i) => (
                     <motion.div 
@@ -191,25 +191,25 @@ const RoomDetail = () => {
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.1 }}
-                      className="bg-white p-10 rounded-[3rem] border border-brand-50 shadow-xl shadow-brand-500/5 space-y-6"
+                      className="bg-white p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border border-brand-50 shadow-xl shadow-brand-500/5 space-y-6"
                     >
                        <div className="flex justify-between items-center">
                           <div className="flex items-center gap-3">
-                             <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center font-black text-brand-600 text-xs italic">
+                             <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-brand-100 flex items-center justify-center font-black text-brand-600 text-[10px] italic">
                                 {rev.user?.name?.charAt(0) || 'G'}
                              </div>
-                             <span className="font-black text-brand-600 text-sm uppercase tracking-tight">{rev.user?.name || 'Guest'}</span>
+                             <span className="font-black text-brand-600 text-xs md:text-sm uppercase tracking-tight">{rev.user?.name || 'Guest'}</span>
                           </div>
                           <div className="flex gap-0.5">
                             {[...Array(5)].map((_, starIdx) => (
                               <StarIcon 
                                 key={starIdx} 
-                                className={`h-3 w-3 ${starIdx < rev.rating ? 'text-brand-400' : 'text-brand-100'}`} 
+                                className={`h-2.5 w-2.5 md:h-3 md:w-3 ${starIdx < rev.rating ? 'text-brand-400' : 'text-brand-100'}`} 
                               />
                             ))}
                           </div>
                        </div>
-                       <p className="text-brand-500/70 font-bold text-sm leading-relaxed italic">"{rev.comment}"</p>
+                       <p className="text-brand-500/70 font-bold text-xs md:text-sm leading-relaxed italic">"{rev.comment}"</p>
                     </motion.div>
                   ))}
                </div>
@@ -217,26 +217,24 @@ const RoomDetail = () => {
           </div>
 
           {/* ── Right Column: The Reservation Vault ─────────────────── */}
-          <div className="lg:col-span-4 sticky top-32">
+          <div className="lg:col-span-4 lg:sticky lg:top-32">
              <motion.div 
                initial={{ opacity: 0, x: 30 }}
                animate={{ opacity: 1, x: 0 }}
-               className="bg-white p-12 rounded-[4rem] shadow-[0_60px_100px_-20px_rgba(56,34,15,0.18)] border border-brand-100 space-y-10"
+               className="bg-white p-8 sm:p-12 rounded-[3rem] md:rounded-[4rem] shadow-[0_60px_100px_-20px_rgba(56,34,15,0.18)] border border-brand-100 space-y-8 md:space-y-10"
              >
-                <div className="space-y-6 border-b border-brand-50 pb-8">
-                   <div className="flex justify-between items-start">
-                      <div className="space-y-1">
-                        <div className="text-[10px] font-black text-brand-300 uppercase tracking-[0.4em]">Investment</div>
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-5xl font-black text-brand-600 italic font-display">Rs.{Math.round(room.price_per_night).toLocaleString()}</span>
-                          <span className="text-xs font-black text-brand-300 uppercase tracking-widest">/ night</span>
-                        </div>
-                      </div>
-                      <div className="w-10 h-10 rounded-full border border-brand-100 flex items-center justify-center text-brand-200">
-                         <CalendarDaysIcon className="h-5 w-5" />
-                      </div>
-                   </div>
-                </div>
+                    <div className="space-y-4 border-b border-brand-50 pb-8">
+                       <div className="flex justify-between items-center">
+                          <div className="text-[10px] font-black text-brand-300 uppercase tracking-[0.4em]">Booking</div>
+                          <div className="w-10 h-10 rounded-full border border-brand-100 flex items-center justify-center text-brand-200 shrink-0">
+                             <CalendarDaysIcon className="h-5 w-5" />
+                          </div>
+                       </div>
+                       <div className="flex items-baseline gap-2">
+                          <span className="text-4xl md:text-5xl font-black text-brand-600 italic font-display">Rs.{Math.round(room.price_per_night).toLocaleString()}</span>
+                          <span className="text-[10px] font-black text-brand-300 uppercase tracking-widest">/ night</span>
+                       </div>
+                    </div>
 
                 <form onSubmit={handleBooking} className="space-y-8">
                    <AnimatePresence>

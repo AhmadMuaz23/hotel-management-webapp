@@ -9,6 +9,8 @@ import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import VerifyEmail from './pages/auth/VerifyEmail';
 import AdminLogin from './pages/auth/AdminLogin';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 import UserDashboard from './pages/user/UserDashboard';
 import AdminLayout from './components/layout/AdminLayout';
 import AdminOverview from './pages/admin/AdminOverview';
@@ -38,6 +40,8 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/verify-email" element={<VerifyEmail />} />
               <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <UserDashboard />

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MagnifyingGlassIcon, TrashIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import api from '../../services/api';
+import { motion } from 'framer-motion';
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
@@ -39,105 +40,116 @@ export default function ManageUsers() {
   );
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-10"
+    >
       {/* Header section */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-black text-slate-800 tracking-tight">System Users</h1>
-          <p className="text-slate-500 mt-1 font-medium">Manage administrators and guests</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-black text-brand-600 tracking-tighter uppercase leading-none italic">Guest Registry</h1>
+          <p className="text-brand-300 font-bold italic text-xs uppercase tracking-widest">Oversee the residents of the haven sanctuary.</p>
         </div>
       </div>
 
       {/* Search and Filter */}
-      <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/60 flex items-center justify-between">
+      <div className="bg-white p-6 rounded-[2.5rem] shadow-xl shadow-brand-500/5 border border-brand-50 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="relative w-full max-w-md">
-          <MagnifyingGlassIcon className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <MagnifyingGlassIcon className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-brand-300" />
           <input
             type="text"
-            placeholder="Search users..."
+            placeholder="Scan registry..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all font-medium"
+            className="w-full pl-11 pr-4 py-3.5 bg-brand-50 border border-transparent rounded-2xl focus:outline-none focus:bg-white focus:border-brand-200 transition-all font-black text-[10px] uppercase tracking-widest text-brand-600"
           />
         </div>
-        <div className="flex gap-3">
-          <select className="px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 font-medium text-slate-600">
-            <option value="all">All Roles</option>
-            <option value="admin">Admin</option>
-            <option value="guest">Guest</option>
+        <div className="flex gap-4">
+          <select className="px-6 py-3.5 bg-brand-50 border border-transparent rounded-2xl focus:outline-none focus:bg-white focus:border-brand-200 font-black text-[10px] uppercase tracking-widest text-brand-400 cursor-pointer transition-all">
+            <option value="all">Every Persona</option>
+            <option value="admin">Administrators</option>
+            <option value="guest">Verified Guests</option>
           </select>
         </div>
       </div>
 
       {/* Users Table */}
-      <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+      <div className="bg-white rounded-[3rem] shadow-2xl shadow-brand-500/5 border border-brand-50 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse min-w-[900px]">
             <thead>
-              <tr className="bg-slate-50/80 text-slate-500 text-sm font-bold uppercase tracking-wider border-b border-slate-200">
-                <th className="px-6 py-5">User Details</th>
-                <th className="px-6 py-5">Role</th>
-                <th className="px-6 py-5">Status</th>
-                <th className="px-6 py-5">Verified</th>
-                <th className="px-6 py-5 text-right">Actions</th>
+              <tr className="bg-brand-50/30 text-brand-300 text-[10px] font-black uppercase tracking-widest border-b border-brand-50">
+                <th className="px-10 py-6">Resident Details</th>
+                <th className="px-6 py-6 text-center">Sanctuary Role</th>
+                <th className="px-6 py-6 text-center">Vault Balance</th>
+                <th className="px-6 py-6 text-center">Persona Status</th>
+                <th className="px-6 py-6 text-center">Verified</th>
+                <th className="px-10 py-6 text-right">Access Control</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-brand-50/50">
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center text-slate-500 font-medium">
-                    Loading users...
-                  </td>
+                  <td colSpan="6" className="px-6 py-20 text-center text-[10px] font-black uppercase tracking-widest text-brand-200 italic">Synchronizing Guest list...</td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-8 text-center text-slate-500 font-medium">
-                    No users found matching your search.
-                  </td>
+                  <td colSpan="6" className="px-6 py-20 text-center text-[10px] font-black uppercase tracking-widest text-brand-200 italic">Registry is silent.</td>
                 </tr>
               ) : (
                 filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-slate-50/50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div>
-                        <div className="font-bold text-slate-800">{user.name}</div>
-                        <div className="text-sm text-slate-500 font-medium">{user.email}</div>
+                  <tr key={user.id} className="hover:bg-brand-50/30 transition-all group">
+                    <td className="px-10 py-6">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-2xl bg-brand-50 flex items-center justify-center font-black text-brand-600 text-xs italic shadow-sm group-hover:bg-brand-600 group-hover:text-white transition-all">
+                          {user.name?.charAt(0) || 'U'}
+                        </div>
+                        <div>
+                          <p className="font-black text-sm text-brand-600 uppercase tracking-tight leading-none">{user.name}</p>
+                          <p className="text-[10px] font-bold text-brand-300 italic mt-1">{user.email}</p>
+                        </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${
-                        user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-700'
+                    <td className="px-6 py-6 text-center">
+                      <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-sm transform group-hover:scale-105 transition-all ${
+                        user.role === 'admin' ? 'bg-brand-600 text-white italic' : 'bg-brand-50 text-brand-400 italic'
                       }`}>
                         {user.role}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                        user.status === 'active' ? 'bg-emerald-100 text-emerald-700' :
-                        'bg-red-100 text-red-700'
+                    <td className="px-6 py-6 text-center">
+                      <div className="font-black text-xs text-brand-600 italic">Rs. {(parseFloat(user.balance) || 0).toLocaleString()}</div>
+                    </td>
+                    <td className="px-6 py-6 text-center">
+                      <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm ${
+                        user.status === 'active' ? 'bg-green-50 text-green-600 border border-green-100 italic' :
+                        'bg-red-50 text-red-600 border border-red-100 italic'
                       }`}>
                         {user.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-slate-500">
-                      {user.verified ? (
-                        <CheckCircleIcon className="w-6 h-6 text-emerald-500" />
-                      ) : (
-                        <XCircleIcon className="w-6 h-6 text-red-400" />
-                      )}
+                    <td className="px-6 py-6 text-center">
+                      <div className="flex justify-center">
+                        {user.verified ? (
+                          <CheckCircleIcon className="w-5 h-5 text-green-500" />
+                        ) : (
+                          <XCircleIcon className="w-5 h-5 text-brand-100" />
+                        )}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-10 py-6 text-right">
                       {user.role !== 'admin' && (
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300">
                           <button 
                             onClick={() => handleToggleBlock(user)}
-                            className={`p-2 rounded-lg transition-colors text-[10px] font-bold uppercase tracking-widest ${
+                            className={`px-5 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg ${
                                user.status === 'blocked' ? 
-                               'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 
-                               'bg-red-100 text-red-700 hover:bg-red-200'
+                               'bg-green-600 text-white shadow-green-200' : 
+                               'bg-red-50 text-red-600 shadow-red-50'
                             }`}
                           >
-                            {user.status === 'blocked' ? 'Unblock' : 'Block'}
+                            {user.status === 'blocked' ? 'Authorize' : 'Relinquish'}
                           </button>
                         </div>
                       )}
@@ -149,6 +161,7 @@ export default function ManageUsers() {
           </table>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
+

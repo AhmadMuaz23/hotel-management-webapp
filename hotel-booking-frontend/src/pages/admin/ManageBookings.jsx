@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  TrashIcon, 
+  CheckCircleIcon, 
+  XCircleIcon,
+  EllipsisHorizontalIcon
+} from '@heroicons/react/24/outline';
 
 const ManageBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -38,64 +45,109 @@ const ManageBookings = () => {
     }
   };
 
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center h-96 space-y-4">
+      <div className="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin" />
+      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-400">Loading Reservations...</p>
+    </div>
+  );
+
   return (
-    <div className="space-y-8">
-      <div>
-         <h1 className="text-3xl font-black text-slate-900 tracking-tight">Booking Management</h1>
-         <p className="text-slate-500 font-medium">Approve, cancel or modify hotel reservations.</p>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-10"
+    >
+      <div className="space-y-2">
+         <h1 className="text-4xl font-black text-brand-600 tracking-tighter uppercase leading-none italic">Manage Bookings</h1>
+         <p className="text-brand-300 font-bold italic text-xs uppercase tracking-widest">Maintain the sanctuary occupancy and reservation flow.</p>
       </div>
 
-      <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100">
-        <table className="w-full text-left">
-           <thead className="bg-slate-50 border-b border-slate-100">
-              <tr>
-                 <th className="px-6 py-4 text-xs font-bold uppercase text-slate-400">User</th>
-                 <th className="px-6 py-4 text-xs font-bold uppercase text-slate-400">Room</th>
-                 <th className="px-6 py-4 text-xs font-bold uppercase text-slate-400">Dates</th>
-                 <th className="px-6 py-4 text-xs font-bold uppercase text-slate-400">Total</th>
-                 <th className="px-6 py-4 text-xs font-bold uppercase text-slate-400">Status</th>
-                 <th className="px-6 py-4 text-xs font-bold uppercase text-slate-400 text-right">Actions</th>
-              </tr>
-           </thead>
-           <tbody className="divide-y divide-slate-50 font-medium text-slate-700">
-              {bookings.length === 0 ? (
-                <tr><td colSpan="6" className="p-10 text-center text-slate-400">No records found.</td></tr>
-              ) : bookings.map(booking => (
-                <tr key={booking.id} className="hover:bg-blue-50/10 transition">
-                   <td className="px-6 py-5 text-sm font-bold text-slate-900">{booking.user?.name || 'User'}</td>
-                   <td className="px-6 py-5 text-sm">{booking.room?.name}</td>
-                   <td className="px-6 py-5 text-xs text-slate-400">
-                      {booking.check_in} — {booking.check_out}
-                   </td>
-                   <td className="px-6 py-5 font-bold text-blue-600">Rs. {Math.round(booking.total_price).toLocaleString()}</td>
-                   <td className="px-6 py-5">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                         booking.status === 'approved' ? 'bg-emerald-100 text-emerald-700' :
-                         booking.status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
-                      }`}>
-                         {booking.status}
-                      </span>
-                   </td>
-                   <td className="px-6 py-5 text-right space-x-2">
-                      {booking.status === 'pending' && (
-                        <>
-                          <button onClick={() => updateStatus(booking.id, 'approve')} className="bg-emerald-600 text-white text-[10px] p-2 px-3 rounded-lg font-bold hover:shadow-lg shadow-emerald-200 transition">Approve</button>
-                          <button onClick={() => updateStatus(booking.id, 'cancel')} className="bg-slate-100 text-slate-600 text-[10px] p-2 px-3 rounded-lg font-bold hover:bg-slate-200 transition">Deny</button>
-                        </>
-                      )}
-                      {booking.status === 'cancelled' ? (
-                          <button onClick={() => deleteBooking(booking.id)} className="bg-red-50 text-red-600 text-[10px] p-2 px-3 rounded-lg font-bold hover:bg-red-100 transition">Remove</button>
-                      ) : (
-                          <button className="text-slate-300 hover:text-blue-500 transition cursor-not-allowed">•••</button>
-                      )}
-                   </td>
+      <div className="bg-white rounded-[3rem] overflow-hidden shadow-xl shadow-brand-500/5 border border-brand-50">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[900px]">
+             <thead>
+                <tr className="bg-brand-50/30 border-b border-brand-50">
+                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-brand-300">Guest</th>
+                   <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-brand-300">Sanctuary</th>
+                   <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-brand-300">Timeline</th>
+                   <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-brand-300">Premium</th>
+                   <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-brand-300">Status</th>
+                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-brand-300 text-right">Sanctuary Control</th>
                 </tr>
-              ))}
-           </tbody>
-        </table>
+             </thead>
+             <tbody className="divide-y divide-brand-50/50">
+                {bookings.length === 0 ? (
+                  <tr><td colSpan="6" className="p-20 text-center text-[10px] font-black uppercase tracking-[0.2em] text-brand-200 italic">No reservation records found.</td></tr>
+                ) : bookings.map(booking => (
+                  <tr key={booking.id} className="hover:bg-brand-50/20 transition-all group">
+                     <td className="px-8 py-6">
+                        <div className="flex items-center gap-3">
+                           <div className="w-9 h-9 rounded-xl bg-brand-50 flex items-center justify-center font-black text-brand-600 text-[10px] italic group-hover:bg-brand-600 group-hover:text-white transition-all shadow-sm">
+                              {booking.user?.name?.charAt(0) || 'G'}
+                           </div>
+                           <span className="text-sm font-black text-brand-600 uppercase tracking-tight">{booking.user?.name || 'Guest'}</span>
+                        </div>
+                     </td>
+                     <td className="px-6 py-6 text-[11px] font-bold text-brand-500 uppercase tracking-wide italic">{booking.room?.name || 'Sanctuary Unit'}</td>
+                     <td className="px-6 py-6">
+                       <p className="text-[10px] font-black text-brand-400 uppercase tracking-tighter italic">
+                          {new Date(booking.check_in).toLocaleDateString()} — {new Date(booking.check_out).toLocaleDateString()}
+                       </p>
+                     </td>
+                     <td className="px-6 py-6 font-black text-xs text-brand-600 italic">Rs. {Math.round(booking.total_price).toLocaleString()}</td>
+                     <td className="px-6 py-6">
+                        <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm ${
+                           booking.status === 'approved' ? 'bg-green-50 text-green-600 border border-green-100 italic' :
+                           booking.status === 'cancelled' ? 'bg-red-50 text-red-600 border border-red-100 italic' : 'bg-orange-50 text-orange-600 border border-orange-100 italic'
+                        }`}>
+                           {booking.status}
+                        </span>
+                     </td>
+                     <td className="px-8 py-6 text-right">
+                        <div className="flex items-center justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                          {booking.status === 'pending' && (
+                            <>
+                              <button 
+                                onClick={() => updateStatus(booking.id, 'approve')} 
+                                className="bg-brand-600 text-white p-2.5 rounded-xl shadow-lg shadow-brand-200 hover:scale-110 active:scale-95 transition-all"
+                                title="Confirm Reservation"
+                              >
+                                <CheckCircleIcon className="w-4 h-4" />
+                              </button>
+                              <button 
+                                onClick={() => updateStatus(booking.id, 'cancel')} 
+                                className="bg-white border border-brand-100 text-brand-400 p-2.5 rounded-xl hover:text-red-500 hover:bg-red-50 hover:border-red-100 transition-all hover:scale-110 active:scale-95"
+                                title="Deny Reservation"
+                              >
+                                <XCircleIcon className="w-4 h-4" />
+                              </button>
+                            </>
+                          )}
+                          {booking.status === 'cancelled' ? (
+                              <button 
+                                onClick={() => deleteBooking(booking.id)} 
+                                className="bg-red-50 text-red-500 p-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-md shadow-red-100 hover:scale-110 active:scale-95"
+                                title="Remove Permanently"
+                              >
+                                <TrashIcon className="w-4 h-4" />
+                              </button>
+                          ) : (
+                              <div className="p-2.5 text-brand-100 cursor-not-allowed">
+                                <EllipsisHorizontalIcon className="w-4 h-4" />
+                              </div>
+                          )}
+                        </div>
+                     </td>
+                  </tr>
+                ))}
+             </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
 export default ManageBookings;
+

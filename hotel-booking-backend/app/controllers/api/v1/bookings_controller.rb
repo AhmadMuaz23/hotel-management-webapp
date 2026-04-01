@@ -39,7 +39,7 @@ module Api
 
         room = Room.find(params[:room_id])
 
-        # calculate nights and price
+        # Calculate nights and price
         nights = (check_out - check_in).to_i
 
         if nights <= 0
@@ -47,6 +47,10 @@ module Api
         end
 
         total_price = nights * room.price_per_night
+
+        if @current_user.balance < total_price
+          render json: { errors: ["Insufficient balance. Current balance: Rs.#{@current_user.balance}"] }, status: :payment_required and return
+        end
 
         booking = @current_user.bookings.build(
           room_id: room.id,
@@ -58,6 +62,7 @@ module Api
         )
 
         if booking.save
+          @current_user.update!(balance: @current_user.balance - total_price)
           render json: booking, status: :created
         else
           render json: { errors: booking.errors.full_messages }, status: :unprocessable_entity
@@ -81,7 +86,12 @@ module Api
       # PATCH/PUT /api/v1/bookings/1/cancel
       def cancel
         if @current_user.admin? || @booking.user_id == @current_user.id
+          old_status = @booking.status
           if @booking.update(status: 'cancelled')
+            # Refund if it was pending or approved
+            if old_status == 'pending' || old_status == 'approved'
+              @booking.user.update!(balance: @booking.user.balance + @booking.total_price)
+            end
             @booking.room.update(status: 'available')
             render json: @booking
           else

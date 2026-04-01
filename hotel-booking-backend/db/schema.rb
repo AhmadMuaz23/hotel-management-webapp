@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_30_102406) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_31_204000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,16 +52,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_30_102406) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.decimal "balance", precision: 10, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.string "email"
     t.string "name"
     t.string "password_digest"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
     t.integer "role"
     t.integer "status"
     t.datetime "updated_at", null: false
     t.string "verification_code"
     t.datetime "verification_code_sent_at"
     t.boolean "verified"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "bookings", "rooms"
