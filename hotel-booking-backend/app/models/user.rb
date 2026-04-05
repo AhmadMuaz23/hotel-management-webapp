@@ -4,6 +4,8 @@ class User < ApplicationRecord
   has_many :bookings, dependent: :destroy
   has_many :reviews, dependent: :destroy
 
+  has_one_attached :avatar
+
   enum :role, { user: 0, admin: 1 }
   enum :status, { active: 0, blocked: 1 }
 
@@ -17,6 +19,14 @@ class User < ApplicationRecord
     self.verification_code = sprintf('%06d', rand(10**6))
     self.verification_code_sent_at = Time.current
     save(validate: false)
+  end
+
+  def avatar_url
+    if avatar.attached?
+      Rails.application.routes.url_helpers.rails_blob_url(avatar, host: 'http://localhost:3000')
+    else
+      nil
+    end
   end
 
   private

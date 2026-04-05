@@ -170,7 +170,8 @@ const RoomDetail = () => {
             </motion.div>
 
             {/* ── Reviews Grid ────────────────────────────────────────── */}
-            <div className="space-y-8 md:space-y-12">
+            {reviews.length > 0 && (
+              <div className="space-y-8 md:space-y-12">
                <div className="flex items-end justify-between">
                   <div className="space-y-2">
                     <h2 className="text-2xl md:text-3xl font-black text-brand-600 tracking-tight leading-tight uppercase">Guest Insights</h2>
@@ -180,11 +181,7 @@ const RoomDetail = () => {
                </div>
 
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                  {reviews.length === 0 ? (
-                    <div className="col-span-full py-10 bg-white rounded-3xl border border-dashed border-brand-200 text-center text-brand-300">
-                      <p className="text-[10px] font-bold uppercase tracking-widest italic px-4">Be the first to share your experience</p>
-                    </div>
-                  ) : reviews.map((rev, i) => (
+                  {reviews.map((rev, i) => (
                     <motion.div 
                       key={rev.id} 
                       initial={{ opacity: 0, scale: 0.95 }}
@@ -213,7 +210,8 @@ const RoomDetail = () => {
                     </motion.div>
                   ))}
                </div>
-            </div>
+             </div>
+            )}
           </div>
 
           {/* ── Right Column: The Reservation Vault ─────────────────── */}
@@ -253,8 +251,8 @@ const RoomDetail = () => {
                       <div className="space-y-2">
                         <label className="text-[9px] font-black text-brand-300 uppercase tracking-[0.2em] pl-2">Check-In</label>
                         <input 
-                           type="date" required 
-                           className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-4 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-black text-xs text-brand-600" 
+                           type="date" required min={new Date().toISOString().split('T')[0]}
+                           className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-3 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-bold text-xs text-brand-600" 
                            value={bookingData.check_in}
                            onChange={(e) => setBookingData({...bookingData, check_in: e.target.value})}
                         />
@@ -262,8 +260,8 @@ const RoomDetail = () => {
                       <div className="space-y-2">
                         <label className="text-[9px] font-black text-brand-300 uppercase tracking-[0.2em] pl-2">Check-Out</label>
                         <input 
-                           type="date" required 
-                           className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-4 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-black text-xs text-brand-600" 
+                           type="date" required min={bookingData.check_in || new Date().toISOString().split('T')[0]}
+                           className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-3 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-bold text-xs text-brand-600" 
                            value={bookingData.check_out}
                            onChange={(e) => setBookingData({...bookingData, check_out: e.target.value})}
                         />
@@ -271,9 +269,9 @@ const RoomDetail = () => {
                    </div>
 
                    <div className="space-y-2">
-                      <label className="text-[9px] font-black text-brand-300 uppercase tracking-[0.2em] pl-2">Occupancy</label>
+                      <label className="text-sm font-black text-brand-300 uppercase tracking-[0.2em] pl-2">Occupancy</label>
                       <select 
-                         className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-4 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-black text-xs text-brand-600 appearance-none cursor-pointer"
+                         className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-3 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-bold text-xs text-brand-600 appearance-none cursor-pointer"
                          value={bookingData.guests}
                          onChange={(e) => setBookingData({...bookingData, guests: e.target.value})}
                       >
@@ -287,7 +285,7 @@ const RoomDetail = () => {
                          className="group relative w-full h-16 rounded-[2rem] overflow-hidden shadow-[0_20px_40px_-10px_rgba(56,34,15,0.4)] active:scale-95 transition-transform"
                       >
                          <div className="absolute inset-0 bg-brand-600 group-hover:bg-brand-500 transition-colors" />
-                         <span className="relative z-10 text-white font-black text-[10px] uppercase tracking-[0.4em]">Initialize Reservation</span>
+                         <span className="relative z-10 text-white font-black text-sm uppercase tracking-[0.4em]">Initialize Reservation</span>
                       </button>
                       <div className="flex items-center justify-center gap-2 mt-6">
                         <ShieldCheckIcon className="h-4 w-4 text-brand-200" />

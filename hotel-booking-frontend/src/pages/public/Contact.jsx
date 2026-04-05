@@ -8,7 +8,35 @@ import {
   GlobeAltIcon
 } from '@heroicons/react/24/outline';
 
+import { useState } from 'react';
+import api from '../../services/api';
+
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: 'General Inquiry',
+    message: ''
+  });
+  const [status, setStatus] = useState({ type: '', text: '' });
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setStatus({ type: '', text: '' });
+
+    try {
+      const response = await api.post('/contact_messages', formData);
+      setStatus({ type: 'success', text: response.data.message });
+      setFormData({ name: '', email: '', subject: 'General Inquiry', message: '' });
+    } catch (err) {
+      const errorMsg = err.response?.data?.errors?.join(', ') || 'Something went wrong. Please try again.';
+      setStatus({ type: 'error', text: errorMsg });
+    } finally {
+      setLoading(false);
+    }
+  };
   const contactInfo = [
     {
       title: 'Voice of Haven',
@@ -83,21 +111,41 @@ const Contact = () => {
               </p>
             </div>
 
-            <form className="space-y-8">
+            <form className="space-y-8" onSubmit={handleSubmit}>
+              {status.text && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`p-6 rounded-3xl text-[10px] font-black uppercase tracking-widest text-center border ${
+                    status.type === 'success' 
+                    ? 'bg-emerald-50 text-emerald-600 border-emerald-100' 
+                    : 'bg-red-50 text-red-600 border-red-100'
+                  }`}
+                >
+                  {status.text}
+                </motion.div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">
                   <label className="text-[10px] font-black text-brand-300 uppercase tracking-widest pl-2">Full Name</label>
                   <input 
+                    required
                     type="text" 
                     placeholder="John Doe"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-5 text-brand-600 font-bold outline-none focus:ring-4 focus:ring-brand-400/10 transition-all"
                   />
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] font-black text-brand-300 uppercase tracking-widest pl-2">Email Address</label>
                   <input 
+                    required
                     type="email" 
                     placeholder="john@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-5 text-brand-600 font-bold outline-none focus:ring-4 focus:ring-brand-400/10 transition-all"
                   />
                 </div>
@@ -105,7 +153,11 @@ const Contact = () => {
 
               <div className="space-y-3">
                 <label className="text-[10px] font-black text-brand-300 uppercase tracking-widest pl-2">Subject</label>
-                <select className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-5 text-brand-600 font-black text-xs uppercase tracking-widest outline-none focus:ring-4 focus:ring-brand-400/10 transition-all appearance-none cursor-pointer">
+                <select 
+                  className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-5 text-brand-600 font-black text-xs uppercase tracking-widest outline-none focus:ring-4 focus:ring-brand-400/10 transition-all appearance-none cursor-pointer"
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                >
                   <option>General Inquiry</option>
                   <option>Reservation Support</option>
                   <option>Event Planning</option>
@@ -116,16 +168,25 @@ const Contact = () => {
               <div className="space-y-3">
                 <label className="text-[10px] font-black text-brand-300 uppercase tracking-widest pl-2">Your Thoughts</label>
                 <textarea 
+                  required
                   rows="5"
                   placeholder="How can we make your stay extraordinary?"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="w-full bg-brand-50 border border-brand-100 rounded-[2rem] p-6 text-brand-600 font-bold outline-none focus:ring-4 focus:ring-brand-400/10 transition-all resize-none"
                 ></textarea>
               </div>
 
-              <button className="group relative w-full h-20 rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(56,34,15,0.4)] active:scale-[0.98] transition-all">
+              <button 
+                type="submit"
+                disabled={loading}
+                className="group relative w-full h-20 rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(56,34,15,0.4)] active:scale-[0.98] transition-all disabled:opacity-70"
+              >
                 <div className="absolute inset-0 bg-brand-600 group-hover:bg-brand-500 transition-colors" />
                 <div className="relative z-10 flex items-center justify-center gap-4 text-white">
-                  <span className="font-black text-[11px] uppercase tracking-[0.5em]">Dispatch Message</span>
+                  <span className="font-black text-[11px] uppercase tracking-[0.5em]">
+                    {loading ? 'Dispatching...' : 'Dispatch Message'}
+                  </span>
                   <ChatBubbleLeftRightIcon className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </div>
               </button>

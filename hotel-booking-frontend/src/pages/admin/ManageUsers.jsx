@@ -7,6 +7,8 @@ export default function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterRole, setFilterRole] = useState('all');
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     fetchUsers();
@@ -17,7 +19,9 @@ export default function ManageUsers() {
       const response = await api.get('/users');
       setUsers(response.data);
     } catch (error) {
+      const rawError = JSON.stringify(error, Object.getOwnPropertyNames(error));
       console.error('Failed to fetch users:', error);
+      setErrorMsg(`Crash details: ${rawError}`);
     } finally {
       setLoading(false);
     }
@@ -34,10 +38,22 @@ export default function ManageUsers() {
     }
   };
 
-  const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleDeleteUser = async (user) => {
+    if (user.role === 'admin') return;
+    if (!window.confirm(`Are you sure you want to permanently delete ${user.name}? This action cannot be undone.`)) return;
+    try {
+      await api.delete(`/users/${user.id}`);
+      fetchUsers();
+    } catch (error) {
+      alert('Failed to delete user');
+    }
+  };
+
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = (user.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || (user.email || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = filterRole === 'all' || user.role === filterRole || (filterRole === 'guest' && user.role !== 'admin');
+    return matchesSearch && matchesRole;
+  });
 
   return (
     <motion.div 
@@ -66,7 +82,11 @@ export default function ManageUsers() {
           />
         </div>
         <div className="flex gap-4">
-          <select className="px-6 py-3.5 bg-brand-50 border border-transparent rounded-2xl focus:outline-none focus:bg-white focus:border-brand-200 font-black text-[10px] uppercase tracking-widest text-brand-400 cursor-pointer transition-all">
+          <select 
+            value={filterRole}
+            onChange={(e) => setFilterRole(e.target.value)}
+            className="px-6 py-3.5 bg-brand-50 border border-transparent rounded-2xl focus:outline-none focus:bg-white focus:border-brand-200 font-black text-[10px] uppercase tracking-widest text-brand-400 cursor-pointer transition-all"
+          >
             <option value="all">Every Persona</option>
             <option value="admin">Administrators</option>
             <option value="guest">Verified Guests</option>
@@ -92,6 +112,10 @@ export default function ManageUsers() {
               {loading ? (
                 <tr>
                   <td colSpan="6" className="px-6 py-20 text-center text-[10px] font-black uppercase tracking-widest text-brand-200 italic">Synchronizing Guest list...</td>
+                </tr>
+              ) : errorMsg ? (
+                <tr>
+                  <td colSpan="6" className="px-6 py-20 text-center text-[10px] font-black uppercase tracking-widest text-red-400 italic">Error: {errorMsg}</td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
@@ -146,10 +170,17 @@ export default function ManageUsers() {
                             className={`px-5 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-lg ${
                                user.status === 'blocked' ? 
                                'bg-green-600 text-white shadow-green-200' : 
-                               'bg-red-50 text-red-600 shadow-red-50'
+                               'bg-orange-50 text-orange-600 shadow-orange-50'
                             }`}
                           >
-                            {user.status === 'blocked' ? 'Authorize' : 'Relinquish'}
+                            {user.status === 'blocked' ? 'Unblock' : 'Block'}
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteUser(user)}
+                            className="p-2.5 rounded-xl bg-red-50 text-red-600 shadow-lg hover:bg-red-600 hover:text-white transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
+                            title="Delete Resident"
+                          >
+                            <TrashIcon className="w-4 h-4" />
                           </button>
                         </div>
                       )}

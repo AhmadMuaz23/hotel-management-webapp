@@ -66,7 +66,7 @@ const AdminLogin = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-[9px] font-black text-brand-300/60 uppercase tracking-[0.4em] mt-3"
+            className="text-sm font-black text-brand-300/60 uppercase tracking-[0.4em] mt-3"
           >
             Secure Administrative Access
           </motion.p>
@@ -94,14 +94,14 @@ const AdminLogin = () => {
             </AnimatePresence>
 
             <div className="space-y-2 group">
-              <label className="block text-[9px] font-black text-brand-300 uppercase tracking-[0.25em] ml-4 italic group-focus-within:text-brand-400 transition-colors">
-                Command Identity
+              <label className="block text-sm font-black text-brand-300 uppercase tracking-[0.25em] ml-4 italic group-focus-within:text-brand-400 transition-colors">
+                Admin Email
               </label>
               <input
                 id="admin-email"
                 type="email"
                 required
-                className="w-full px-6 py-4 rounded-[1.5rem] text-[11px] font-black text-brand-50 placeholder-brand-300/20 border border-white/10 focus:outline-none focus:bg-white/[0.05] focus:border-brand-500/50 transition-all duration-500 tracking-widest italic bg-white/[0.02]"
+                className="w-full px-6 py-6 rounded-[1.5rem] text-base font-black text-brand-50 placeholder-brand-300/20 border border-white/10 focus:outline-none focus:bg-white/[0.05] focus:border-brand-500/50 transition-all duration-500 tracking-widest italic bg-white/[0.02]"
                 value={email}
                 autoComplete="off"
                 placeholder="admin@haven.com"
@@ -110,14 +110,14 @@ const AdminLogin = () => {
             </div>
 
             <div className="space-y-2 group">
-              <label className="block text-[9px] font-black text-brand-300 uppercase tracking-[0.25em] ml-4 italic group-focus-within:text-brand-400 transition-colors">
+              <label className="block text-sm font-black text-brand-300 uppercase tracking-[0.25em] ml-4 italic group-focus-within:text-brand-400 transition-colors">
                 Authority Code
               </label>
               <input
                 id="admin-password"
                 type="password"
                 required
-                className="w-full px-6 py-4 rounded-[1.5rem] text-[11px] font-black text-brand-50 placeholder-brand-300/20 border border-white/10 focus:outline-none focus:bg-white/[0.05] focus:border-brand-500/50 transition-all duration-500 tracking-[0.5em] italic bg-white/[0.02]"
+                className="w-full px-6 py-6 rounded-[1.5rem] text-base font-black text-brand-50 placeholder-brand-300/20 border border-white/10 focus:outline-none focus:bg-white/[0.05] focus:border-brand-500/50 transition-all duration-500 tracking-[0.5em] italic bg-white/[0.02]"
                 value={password}
                 autoComplete="new-password"
                 placeholder="••••••••"
@@ -131,7 +131,7 @@ const AdminLogin = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isLoading}
-              className="w-full h-16 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.5em] text-white transition-all duration-500 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-brand-600 to-brand-800 shadow-brand-900/50 italic"
+              className="w-full h-16 rounded-[1.5rem] text-base font-black uppercase tracking-[0.5em] text-white transition-all duration-500 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-brand-600 to-brand-800 shadow-brand-900/50 italic"
             >
               {isLoading ? (
                 <span className="flex items-center justify-center gap-3">
@@ -142,7 +142,7 @@ const AdminLogin = () => {
                   Authorizing
                 </span>
               ) : (
-                'Confirm Access'
+                'Log in'
               )}
             </motion.button>
           </form>

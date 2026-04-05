@@ -17,6 +17,9 @@ import AdminOverview from './pages/admin/AdminOverview';
 import ManageBookings from './pages/admin/ManageBookings';
 import ManageRooms from './pages/admin/ManageRooms';
 import ManageUsers from './pages/admin/ManageUsers';
+import ManageMessages from './pages/admin/ManageMessages';
+import ManageReviews from './pages/admin/ManageReviews';
+import AdminSettings from './pages/admin/AdminSettings';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -58,6 +61,9 @@ function App() {
                 <Route path="bookings" element={<ManageBookings />} />
                 <Route path="rooms" element={<ManageRooms />} />
                 <Route path="users" element={<ManageUsers />} />
+                <Route path="messages" element={<ManageMessages />} />
+                <Route path="reviews" element={<ManageReviews />} />
+                <Route path="settings" element={<AdminSettings />} />
               </Route>
             </Routes>
           </main>

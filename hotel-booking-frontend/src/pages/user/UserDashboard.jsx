@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CalendarIcon, 
@@ -8,6 +8,8 @@ import {
   CheckBadgeIcon, 
   ArrowRightIcon,
   ShoppingBagIcon,
+  KeyIcon,
+  UserIcon,
   StarIcon as StarOutline
 } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/24/solid';
@@ -16,10 +18,32 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 
 const UserDashboard = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [userReviews, setUserReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingAvatar(true);
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    try {
+      const response = await api.put(`/users/${user.id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setUser(response.data);
+    } catch (err) {
+      console.error('Failed to upload image:', err);
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
 
   useEffect(() => {
     fetchBookings();
@@ -145,10 +169,10 @@ const UserDashboard = () => {
               <CheckBadgeIcon className="h-3 w-3" />
               Verified Haven Member
             </div>
-            <h1 className="text-4xl md:text-5xl font-display font-black text-brand-600 tracking-tight">
-              Welcome back, <span className="text-brand-400 italic font-medium">{user?.name}</span>
+            <h1 className="text-4xl md:text-5xl font-display font-black text-brand-600 tracking-tight leading-tight">
+              Welcome back, <span className="text-brand-500 italic font-medium">{user?.name}</span>
             </h1>
-            <p className="mt-2 text-brand-300 font-medium">Your sanctuary away from home is waiting for you.</p>
+            <p className="mt-3 text-brand-500 font-bold text-lg">Your sanctuary away from home is ready for you.</p>
           </div>
           
           <div className="flex gap-4">
@@ -209,9 +233,9 @@ const UserDashboard = () => {
             transition={{ delay: 0.4 }}
             className="lg:col-span-2 space-y-6"
           >
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-2xl font-display font-black text-brand-600">Recent Stays</h2>
-              <p className="text-xs font-bold text-brand-300 uppercase tracking-widest">History</p>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-3xl font-display font-black text-brand-600 underline decoration-brand-200 decoration-8 underline-offset-8">Recent Stays</h2>
+              <p className="text-[10px] font-black text-brand-500 uppercase tracking-widest bg-brand-100 px-3 py-1 rounded-full">Record History</p>
             </div>
 
             {bookings.length === 0 ? (
@@ -249,14 +273,24 @@ const UserDashboard = () => {
                         </span>
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="flex items-center gap-2 text-brand-400">
-                          <CalendarIcon className="h-4 w-4 text-brand-300" />
-                          <span className="text-xs font-semibold">{booking.check_in}</span>
+                      <div className="grid grid-cols-2 gap-6 mt-4">
+                        <div className="flex items-center gap-3 text-brand-600">
+                          <div className="p-2 bg-brand-50 rounded-xl">
+                            <CalendarIcon className="h-5 w-5 text-brand-500" />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[9px] font-black uppercase text-brand-300 tracking-widest">Check-In</span>
+                            <span className="text-sm font-black">{booking.check_in}</span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 text-brand-400">
-                          <UserGroupIcon className="h-4 w-4 text-brand-300" />
-                          <span className="text-xs font-semibold">{booking.guests} Guests</span>
+                        <div className="flex items-center gap-3 text-brand-600">
+                          <div className="p-2 bg-brand-50 rounded-xl">
+                            <UserGroupIcon className="h-5 w-5 text-brand-500" />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[9px] font-black uppercase text-brand-300 tracking-widest">Occupancy</span>
+                            <span className="text-sm font-black">{booking.guests} Residents</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -382,7 +416,66 @@ const UserDashboard = () => {
             transition={{ delay: 0.6 }}
             className="space-y-8"
           >
-            <div className="bg-brand-600 rounded-[2.5rem] p-8 text-brand-50 shadow-2xl shadow-brand-200/80 relative overflow-hidden group">
+            {/* Modern User Profile Card */}
+            <div className="bg-white border-2 border-brand-100 rounded-[3rem] overflow-hidden shadow-2xl shadow-brand-500/10 transition-all duration-500">
+              {/* Header / Banner / Avatar */}
+              <div className="h-24 bg-brand-600 relative">
+                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2">
+                  <div 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-20 h-20 rounded-full border-4 border-white bg-brand-50 flex items-center justify-center text-brand-600 shadow-xl overflow-hidden group cursor-pointer relative"
+                  >
+                    {uploadingAvatar ? (
+                      <div className="w-6 h-6 border-2 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
+                    ) : user?.avatar_url ? (
+                      <img src={user.avatar_url} alt="Profile Avatar" className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                    ) : (
+                      <UserIcon className="h-10 w-10 opacity-40 group-hover:scale-110 transition-transform" />
+                    )}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                      <span className="text-white text-[8px] font-black uppercase tracking-widest text-center mt-6">Upload</span>
+                    </div>
+                  </div>
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    onChange={handleAvatarUpload} 
+                    accept="image/*" 
+                    className="hidden" 
+                  />
+                </div>
+              </div>
+
+              {/* Profile Info */}
+              <div className="pt-14 pb-8 px-6 text-center">
+                <h3 className="text-xl font-display font-black text-brand-600 uppercase tracking-tighter">{user?.name}</h3>
+                <p className="text-[10px] font-black text-brand-300 uppercase tracking-widest mt-1">Sanctuary Resident</p>
+                
+                <div className="mt-8 space-y-2">
+                  <button className="w-full py-4 px-6 bg-brand-50 hover:bg-brand-100 rounded-[1.5rem] border border-brand-100/50 flex items-center gap-4 text-brand-600 transition-all group">
+                    <UserIcon className="h-5 w-5 opacity-50" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] group-hover:tracking-[0.25em] transition-all">Update Identity</span>
+                  </button>
+
+                  <button className="w-full py-4 px-6 bg-brand-50 hover:bg-brand-100 rounded-[1.5rem] border border-brand-100/50 flex items-center gap-4 text-brand-600 transition-all group">
+                    <KeyIcon className="h-5 w-5 opacity-50" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] group-hover:tracking-[0.25em] transition-all">Change Secret Key</span>
+                  </button>
+
+                  <div className="pt-4 mt-4 border-t border-brand-50">
+                    <button 
+                      onClick={() => { localStorage.removeItem('token'); window.location.reload(); }}
+                      className="w-full py-4 px-6 bg-red-50 hover:bg-red-500 hover:text-white rounded-[1.5rem] flex items-center justify-center gap-4 text-red-600 transition-all group shadow-sm"
+                    >
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em]">Depart Sanctuary</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Elite Concierge Card */}
+            <div className="bg-brand-600 rounded-[3rem] p-8 text-brand-50 shadow-2xl shadow-brand-200/80 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/20 rounded-full -mr-16 -mt-16 blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
               
               <h3 className="text-2xl font-display font-bold mb-4 relative z-10">Elite Concierge</h3>
@@ -391,15 +484,6 @@ const UserDashboard = () => {
               <Link to="/contact" className="w-full bg-white text-brand-600 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-brand-50 transition-colors flex items-center justify-center gap-2 relative z-10 shadow-lg">
                 Contact Support
               </Link>
-            </div>
-
-            <div className="bg-white/50 backdrop-blur-md border border-brand-200/30 rounded-[2.5rem] p-8 shadow-sm">
-              <h3 className="text-xl font-display font-bold text-brand-600 mb-6">Manage Profile</h3>
-              <div className="space-y-4">
-                <QuickLink label="Account Settings" />
-                <QuickLink label="Payment Methods" />
-                <QuickLink label="Communication Preferences" />
-              </div>
             </div>
           </motion.div>
 
@@ -419,17 +503,17 @@ const StatCard = ({ title, value, icon, label, variants }) => (
       {icon}
     </div>
     <div>
-      <p className="text-[10px] font-black text-brand-300 uppercase tracking-[0.2em] mb-1">{title}</p>
+      <p className="text-[10px] font-black text-brand-500 uppercase tracking-[0.2em] mb-1">{title}</p>
       <p className="text-3xl font-display font-black text-brand-600">{value}</p>
-      <p className="text-[10px] font-bold text-brand-200 uppercase tracking-widest mt-2">{label}</p>
+      <p className="text-[10px] font-bold text-brand-400 uppercase tracking-widest mt-2">{label}</p>
     </div>
   </motion.div>
 );
 
 const QuickLink = ({ label }) => (
-  <button className="w-full flex items-center justify-between py-3 px-1 border-b border-brand-100/50 text-brand-400 hover:text-brand-600 transition-colors group">
-    <span className="text-sm font-bold">{label}</span>
-    <ArrowRightIcon className="h-4 w-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+  <button className="w-full flex items-center justify-between py-4 px-5 bg-brand-50/50 rounded-2xl border border-transparent hover:border-brand-200 hover:bg-white text-brand-500 hover:text-brand-600 transition-all group">
+    <span className="text-xs font-black uppercase tracking-widest">{label}</span>
+    <ArrowRightIcon className="h-4 w-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all font-black" />
   </button>
 );
 

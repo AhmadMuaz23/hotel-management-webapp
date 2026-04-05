@@ -55,6 +55,25 @@ module Api
           recent_users: recent_users.as_json(except: [:password_digest])
         }
       end
+      # GET /api/v1/admin/reviews
+      def reviews
+        reviews = Review.includes(:user, :room).order(created_at: :desc)
+        render json: reviews.as_json(
+          include: {
+            user: { only: [:id, :name, :email] },
+            room: { only: [:id, :name] }
+          }
+        )
+      end
+
+      # DELETE /api/v1/admin/reviews/:id
+      def delete_review
+        review = Review.find(params[:id])
+        review.destroy
+        head :no_content
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: 'Review not found' }, status: :not_found
+      end
     end
   end
 end

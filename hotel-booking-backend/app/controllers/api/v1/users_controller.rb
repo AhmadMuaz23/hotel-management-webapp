@@ -1,20 +1,33 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :authorize_admin, except: [:show, :update]
-      before_action :set_user, only: [:show, :update, :block, :unblock, :change_role]
+      before_action :authorize_admin, except: [:update]
+      before_action :set_user, only: [:update, :block, :unblock, :destroy]
+
+      # DELETE /api/v1/users/1
+      def destroy
+        @user.destroy
+        render json: { message: 'User deleted successfully' }
+      end
 
       # GET /api/v1/users
       def index
         users = User.all.order(created_at: :desc)
-        render json: users.as_json(except: [:password_digest])
+        render json: users.as_json(except: [:password_digest], methods: [:avatar_url])
       end
 
       # PUT/PATCH /api/v1/users/1
       def update
         if @current_user.admin? || @user.id == @current_user.id
+          if params[:password].present?
+            if params[:current_password].blank? || !@user.authenticate(params[:current_password])
+              render json: { errors: ['Current secret key is incorrect or missing'] }, status: :unprocessable_entity
+              return
+            end
+          end
+
           if @user.update(user_params)
-            render json: @user.as_json(except: [:password_digest])
+            render json: @user.as_json(except: [:password_digest], methods: [:avatar_url])
           else
             render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
           end
@@ -50,7 +63,7 @@ module Api
       end
 
       def user_params
-        params.permit(:name, :email, :password, :password_confirmation)
+        params.permit(:name, :email, :password, :password_confirmation, :avatar)
       end
     end
   end

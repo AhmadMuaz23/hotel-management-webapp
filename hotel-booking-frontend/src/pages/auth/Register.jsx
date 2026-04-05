@@ -25,7 +25,7 @@ const Register = () => {
     setErrors([]);
     try {
       await register(formData);
-      setStep('verify');
+      navigate('/login');
     } catch (err) {
       setErrors(Array.isArray(err.response?.data?.errors) ? err.response.data.errors : [err.response?.data?.errors || 'Registration failed']);
     } finally {
@@ -80,7 +80,7 @@ const Register = () => {
             >
               <div className="text-center space-y-4">
                 <h2 className="text-4xl sm:text-5xl font-black text-brand-600 tracking-tighter leading-none uppercase italic">Join <span className="block text-brand-300 not-italic font-black text-2xl tracking-[0.15em] mt-2 group-hover:tracking-[0.25em] transition-all">Sanctuary</span></h2>
-                <p className="text-[10px] font-black text-brand-300 uppercase tracking-[0.2em] italic">
+                <p className="text-sm font-black text-brand-300 uppercase tracking-[0.2em] italic">
                   Already a resident?{' '}
                   <Link to="/login" className="text-brand-600 hover:text-brand-500 underline decoration-brand-200 underline-offset-4 decoration-2 transition-all">
                     Access Portal
@@ -90,14 +90,14 @@ const Register = () => {
               
               <form className="space-y-6 mt-10" onSubmit={handleRegisterSubmit}>
                 {errors.length > 0 && (
-                  <div className="bg-red-50 text-red-600 p-4 rounded-2xl text-[9px] font-black uppercase tracking-widest text-center border border-red-100 italic shadow-sm">
+                  <div className="bg-red-50 text-red-600 p-4 rounded-2xl text-xs font-black uppercase tracking-widest text-center border border-red-100 italic shadow-sm">
                     {errors.map((err, i) => <p key={i}>{err}</p>)}
                   </div>
                 )}
                 
                 <div className="space-y-5">
-                  <InputGroup label="Chosen Name" type="text" placeholder="Ahmad Muaz" value={formData.name} onChange={(val) => setFormData({ ...formData, name: val })} />
-                  <InputGroup label="Resident Email" type="email" placeholder="you@haven.com" value={formData.email} onChange={(val) => setFormData({ ...formData, email: val })} />
+                  <InputGroup label="User Name" type="text" placeholder="Ahmad Muaz" value={formData.name} onChange={(val) => setFormData({ ...formData, name: val })} />
+                  <InputGroup label="User Email" type="email" placeholder="example@gmail.com" value={formData.email} onChange={(val) => setFormData({ ...formData, email: val })} />
                   <InputGroup label="Secret Key" type="password" placeholder="Min. 8 characters" value={formData.password} onChange={(val) => setFormData({ ...formData, password: val })} />
                   <InputGroup label="Verify Key" type="password" placeholder="Repeat Key" value={formData.password_confirmation} onChange={(val) => setFormData({ ...formData, password_confirmation: val })} />
                 </div>
@@ -110,8 +110,8 @@ const Register = () => {
                   className="group relative w-full h-16 rounded-[2rem] overflow-hidden shadow-2xl shadow-brand-500/20 mt-4 disabled:opacity-70 transition-all"
                 >
                   <div className="absolute inset-0 bg-brand-600 group-hover:bg-brand-500 transition-colors duration-500" />
-                  <span className="relative z-10 text-white font-black text-[10px] uppercase tracking-[0.5em] italic">
-                     {loading ? 'Processing...' : 'Initialize Persona'}
+                  <span className="relative z-10 text-white font-black text-base uppercase tracking-[0.5em] italic">
+                     {loading ? 'Processing...' : 'Create Account'}
                   </span>
                 </motion.button>
               </form>
@@ -191,12 +191,12 @@ const Register = () => {
 
 const InputGroup = ({ label, type, placeholder, value, onChange }) => (
   <div className="space-y-2 group">
-    <label className="text-[9px] font-black text-brand-300 uppercase tracking-widest ml-4 italic group-focus-within:text-brand-600 transition-colors">{label}</label>
+    <label className="text-sm font-black text-brand-300 uppercase tracking-widest ml-4 italic group-focus-within:text-brand-600 transition-colors">{label}</label>
     <input
       type={type}
       required
       placeholder={placeholder}
-      className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] tracking-widest italic placeholder:text-brand-200"
+      className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-6 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-base tracking-widest italic placeholder:text-brand-200"
       value={value}
       autoComplete="new-password"
       onChange={(e) => onChange(e.target.value)}

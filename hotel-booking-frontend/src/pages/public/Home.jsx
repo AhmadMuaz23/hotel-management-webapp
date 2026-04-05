@@ -64,7 +64,7 @@ const Home = () => {
     <div className="overflow-hidden bg-brand-50">
 
       {/* ── Hero ───────────────────────────────────────────────── */}
-      <section className="relative h-[85vh] min-h-[600px] flex items-center pt-24 px-4 overflow-hidden">
+      <section className="relative min-h-[600px] md:h-screen flex items-center py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=80"
@@ -238,7 +238,7 @@ const Home = () => {
               </p>
               <Link 
                 to="/about"
-                className="bg-brand-600 hover:bg-brand-500 text-white px-14 py-5 rounded-3xl font-black text-xs uppercase tracking-widest transition-all shadow-2xl shadow-brand-500/30 inline-block"
+                className="bg-brand-600 hover:bg-brand-500 text-white px-10 md:px-14 py-4 md:py-5 rounded-2xl md:rounded-3xl font-black text-[10px] md:text-xs uppercase tracking-widest transition-all shadow-2xl shadow-brand-500/30 inline-block mt-4"
               >
                 Discover More
               </Link>

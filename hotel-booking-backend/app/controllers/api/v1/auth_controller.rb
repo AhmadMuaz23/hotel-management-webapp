@@ -8,12 +8,10 @@ module Api
         user = User.new(user_params)
         user.role = 0 # default to user
         user.status = 0 # default to active
-        user.verified = false
+        user.verified = true # automatically verified
 
         if user.save
-          user.generate_verification_code
-          UserMailer.account_verification(user).deliver_now
-          render json: { message: 'Registration successful. please verify your email.', user: user_data(user) }, status: :created
+          render json: { message: 'Registration successful. You can now login.', user: user_data(user) }, status: :created
         else
           render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
         end
@@ -73,7 +71,7 @@ module Api
       end
 
       def user_data(user)
-        user.as_json(except: [:password_digest, :created_at, :updated_at, :verification_code])
+        user.as_json(except: [:password_digest, :created_at, :updated_at, :verification_code], methods: [:avatar_url])
       end
     end
   end

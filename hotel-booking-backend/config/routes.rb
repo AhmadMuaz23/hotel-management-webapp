@@ -29,15 +29,20 @@ Rails.application.routes.draw do
       end
       
       # Admin actions structure
-      resources :users, only: [:index, :update] do
+      resources :users, only: [:index, :update, :destroy] do
         member do
           put :block
           put :unblock
         end
       end
       
+      # Contact Inquiries
+      resources :contact_messages, only: [:index, :create, :destroy]
+      
       post '/admin/login',     to: 'admin#login'
       get  '/admin/dashboard', to: 'admin#dashboard'
+      get  '/admin/reviews',   to: 'admin#reviews'
+      delete '/admin/reviews/:id', to: 'admin#delete_review'
     end
   end
 

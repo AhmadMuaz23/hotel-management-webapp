@@ -11,7 +11,8 @@ import {
   MagnifyingGlassIcon,
   BellIcon,
   Bars3Icon,
-  XMarkIcon
+  XMarkIcon,
+  EnvelopeIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -32,6 +33,7 @@ const AdminLayout = () => {
     { name: 'Guests', path: '/admin/users', icon: <UsersIcon className="w-5 h-5" /> },
     { name: 'Sanctuaries', path: '/admin/rooms', icon: <HomeModernIcon className="w-5 h-5" /> },
     { name: 'Reservations', path: '/admin/bookings', icon: <ClipboardDocumentCheckIcon className="w-5 h-5" /> },
+    { name: 'Enquiries', path: '/admin/messages', icon: <EnvelopeIcon className="w-5 h-5" /> },
     { name: 'Insights', path: '/admin/reviews', icon: <StarIcon className="w-5 h-5" /> },
     { name: 'Settings', path: '/admin/settings', icon: <Cog6ToothIcon className="w-5 h-5" /> }
   ];

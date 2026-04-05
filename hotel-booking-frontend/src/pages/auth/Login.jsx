@@ -45,7 +45,7 @@ const Login = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-[10px] font-black text-brand-300 uppercase tracking-[0.25em] italic"
+            className="text-sm font-black text-brand-300 uppercase tracking-[0.25em] italic"
           >
             Or{' '}
             <Link to="/register" className="text-brand-600 hover:text-brand-500 underline decoration-brand-200 underline-offset-4 decoration-2 transition-all">
@@ -61,7 +61,7 @@ const Login = () => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="bg-red-50 text-red-600 p-4 rounded-2xl text-[9px] font-black uppercase tracking-widest text-center border border-red-100 italic shadow-sm"
+                className="bg-red-50 text-red-600 p-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center border border-red-100 italic shadow-sm"
               >
                 {error}
               </motion.div>
@@ -70,12 +70,12 @@ const Login = () => {
           
           <div className="space-y-6">
             <div className="space-y-2 group">
-              <label className="text-[9px] font-black text-brand-300 uppercase tracking-widest ml-4 italic group-focus-within:text-brand-600 transition-colors">Resident Email</label>
+              <label className="text-sm font-black text-brand-300 uppercase tracking-widest ml-4 italic group-focus-within:text-brand-600 transition-colors">User Email</label>
               <input
                 type="email"
                 required
-                placeholder="Ex: sanctuary@haven.com"
-                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] tracking-widest italic placeholder:text-brand-200"
+                placeholder="example@gmail.com"
+                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-6 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-base tracking-widest italic placeholder:text-brand-200"
                 value={email}
                 autoComplete="off"
                 onChange={(e) => setEmail(e.target.value)}
@@ -84,8 +84,8 @@ const Login = () => {
 
             <div className="space-y-2 group">
               <div className="flex justify-between items-center px-4">
-                <label className="text-[9px] font-black text-brand-300 uppercase tracking-widest italic group-focus-within:text-brand-600 transition-colors">Access Code</label>
-                <Link to="/forgot-password" size="sm" className="text-[8px] font-black text-brand-200 hover:text-brand-600 uppercase tracking-widest transition-colors">
+                <label className="text-sm font-black text-brand-300 uppercase tracking-widest italic group-focus-within:text-brand-600 transition-colors">Secret Key</label>
+                <Link to="/forgot-password" size="sm" className="text-xs font-black text-brand-200 hover:text-brand-600 uppercase tracking-widest transition-colors">
                    Lost Key?
                 </Link>
               </div>
@@ -93,7 +93,7 @@ const Login = () => {
                 type="password"
                 required
                 placeholder="••••••••"
-                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-5 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-[11px] tracking-widest italic tracking-[0.5em] placeholder:tracking-widest placeholder:text-brand-200"
+                className="w-full bg-brand-50 border border-transparent rounded-[2rem] p-6 outline-none focus:bg-white focus:border-brand-200 focus:ring-8 focus:ring-brand-400/5 transition-all font-black text-brand-600 text-base tracking-widest italic tracking-[0.5em] placeholder:tracking-widest placeholder:text-brand-200"
                 value={password}
                 autoComplete="new-password"
                 onChange={(e) => setPassword(e.target.value)}
@@ -108,12 +108,12 @@ const Login = () => {
             className="group relative w-full h-16 rounded-[2rem] overflow-hidden shadow-2xl shadow-brand-500/20"
           >
             <div className="absolute inset-0 bg-brand-600 group-hover:bg-brand-500 transition-colors duration-500" />
-            <span className="relative z-10 text-white font-black text-[10px] uppercase tracking-[0.5em] italic">Open Sanctuary</span>
+            <span className="relative z-10 text-white font-black text-base uppercase tracking-[0.5em] italic">Open Sanctuary</span>
           </motion.button>
         </form>
 
         <div className="text-center pt-8 border-t border-brand-50/50">
-          <Link to="/admin/login" className="text-[9px] font-black text-brand-200 hover:text-brand-400 uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-2 group">
+          <Link to="/admin/login" className="text-[11px] font-black text-brand-200 hover:text-brand-400 uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-2 group">
             Sanctuary Admin Gateway <span className="text-lg group-hover:translate-x-2 transition-transform">→</span>
           </Link>
         </div>
