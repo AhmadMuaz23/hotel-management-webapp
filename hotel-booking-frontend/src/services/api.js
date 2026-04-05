@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: 'https://web-production-84a89.up.railway.app/api/v1',
 });
 
 // Add a request interceptor to attach JWT token
