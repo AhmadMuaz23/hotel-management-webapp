@@ -32,6 +32,6 @@ class User < ApplicationRecord
   private
 
   def set_default_balance
-    self.balance ||= 500000.0
+    self.balance = 500000.0 if balance.blank? || balance.zero?
   end
 end
