@@ -1,4 +1,3 @@
-File.open("cors_debug.log", "a") { |f| f.puts "[#{Time.now}] CORS Initializer loaded" }
 # Be sure to restart your server when you modify this file.
 
 # Avoid CORS issues when API is called from the frontend app.
@@ -8,11 +7,12 @@ File.open("cors_debug.log", "a") { |f| f.puts "[#{Time.now}] CORS Initializer lo
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'https://hotel-management-webapp-lovat.vercel.app', 'http://localhost:5173'
+    origins '*' # Temporarily allowing all to confirm if it's a URL mismatch or something else
 
-    resource "*",
+    resource '*',
       headers: :any,
       methods: [:get, :post, :put, :patch, :delete, :options, :head],
-      expose: ['Authorization']
+      expose: ['Authorization'],
+      max_age: 600
   end
 end
