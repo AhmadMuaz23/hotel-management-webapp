@@ -1,7 +1,7 @@
 module Api
   module V1
     class PasswordsController < ApplicationController
-      skip_before_action :authenticate_user, only: [:forgot, :reset]
+      skip_before_action :authenticate_request, only: [:forgot, :reset]
 
       # POST /api/v1/passwords/forgot
       def forgot
