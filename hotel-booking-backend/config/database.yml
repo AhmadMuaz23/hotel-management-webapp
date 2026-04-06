@@ -2,10 +2,10 @@ default: &default
   adapter: postgresql
   encoding: unicode
   username: postgres
-  password: postgres   
+  password: postgres
   host: localhost
   port: 5432
-  pool: 5
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
 development:
   <<: *default
@@ -16,7 +16,6 @@ test:
   database: hotel_booking_backend_test
 
 production:
-  <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
-  # Render already provides this, but we want to make it explicit.
   adapter: postgresql
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
