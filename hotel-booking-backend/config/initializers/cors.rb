@@ -8,10 +8,11 @@ File.open("cors_debug.log", "a") { |f| f.puts "[#{Time.now}] CORS Initializer lo
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "*"
+    origins 'https://hotel-management-webapp-lovat.vercel.app', 'http://localhost:5173'
 
     resource "*",
       headers: :any,
-      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+      methods: [:get, :post, :put, :patch, :delete, :options, :head],
+      expose: ['Authorization']
   end
 end
