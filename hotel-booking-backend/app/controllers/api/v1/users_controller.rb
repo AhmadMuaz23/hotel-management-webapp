@@ -1,8 +1,18 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :authorize_admin, except: [:update]
-      before_action :set_user, only: [:update, :block, :unblock, :destroy]
+      before_action :authorize_admin, except: [:update, :remove_avatar]
+      before_action :set_user, only: [:update, :block, :unblock, :destroy, :remove_avatar]
+
+      # DELETE /api/v1/users/1/remove_avatar
+      def remove_avatar
+        if @current_user.admin? || @user.id == @current_user.id
+          @user.avatar.purge if @user.avatar.attached?
+          render json: @user.as_json(except: [:password_digest], methods: [:avatar_url])
+        else
+          render json: { error: 'Forbidden' }, status: :forbidden
+        end
+      end
 
       # DELETE /api/v1/users/1
       def destroy

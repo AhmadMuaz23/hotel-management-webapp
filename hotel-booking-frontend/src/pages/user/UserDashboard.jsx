@@ -10,7 +10,8 @@ import {
   ShoppingBagIcon,
   KeyIcon,
   UserIcon,
-  StarIcon as StarOutline
+  StarIcon as StarOutline,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import { StarIcon } from '@heroicons/react/24/solid';
 import api from '../../services/api';
@@ -40,6 +41,20 @@ const UserDashboard = () => {
       setUser(response.data);
     } catch (err) {
       console.error('Failed to upload image:', err);
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
+  const handleAvatarRemove = async () => {
+    if (!window.confirm('Erase your profile identity image?')) return;
+    
+    setUploadingAvatar(true);
+    try {
+      const response = await api.delete(`/users/${user.id}/remove_avatar`);
+      setUser(response.data);
+    } catch (err) {
+      console.error('Failed to remove image:', err);
     } finally {
       setUploadingAvatar(false);
     }
@@ -443,6 +458,15 @@ const UserDashboard = () => {
                     accept="image/*" 
                     className="hidden" 
                   />
+                  {user?.avatar_url && (
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); handleAvatarRemove(); }}
+                      className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors z-10"
+                      title="Remove Identity Image"
+                    >
+                      <XMarkIcon className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
               </div>
 

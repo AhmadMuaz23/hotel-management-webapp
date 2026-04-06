@@ -2,6 +2,15 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import UserMenu from './UserMenu';
+import { 
+  Bars3Icon, 
+  XMarkIcon,
+  ShoppingBagIcon,
+  BuildingOfficeIcon,
+  PhoneIcon,
+  InformationCircleIcon
+} from '@heroicons/react/24/outline';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -56,20 +65,7 @@ const Navbar = () => {
           {/* Desktop Right Actions */}
           <div className="hidden md:flex items-center gap-4 lg:gap-6">
             {user ? (
-              <div className="flex items-center gap-4 lg:gap-6">
-                <Link to={user.role === 'admin' ? '/admin' : '/profile'} className="text-right group">
-                  <p className="text-[9px] text-brand-300 font-black uppercase tracking-[0.2em] group-hover:text-brand-500 transition-colors">
-                    {user.role === 'admin' ? 'Administrator' : 'Guest'}
-                  </p>
-                  <p className="text-sm font-black text-brand-600 group-hover:text-brand-400 transition-colors">{user.name}</p>
-                </Link>
-                <button
-                  onClick={logout}
-                  className="bg-brand-100 hover:bg-brand-200 text-brand-500 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
-                >
-                  Logout
-                </button>
-              </div>
+              <UserMenu />
             ) : (
               <div className="flex items-center gap-4">
                 <Link

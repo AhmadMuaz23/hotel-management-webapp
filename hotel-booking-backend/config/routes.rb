@@ -33,6 +33,7 @@ Rails.application.routes.draw do
         member do
           put :block
           put :unblock
+          delete :remove_avatar
         end
       end
       

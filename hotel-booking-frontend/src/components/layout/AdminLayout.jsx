@@ -14,7 +14,7 @@ import {
   XMarkIcon,
   EnvelopeIcon
 } from '@heroicons/react/24/outline';
-import { useAuth } from '../../contexts/AuthContext';
+import UserMenu from './UserMenu';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AdminLayout = () => {
@@ -132,7 +132,7 @@ const AdminLayout = () => {
                 <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-300" />
                 <input 
                   type="text" 
-                  placeholder="Scan directory..." 
+                  placeholder="Scan sanctuary logs..." 
                   className="w-full pl-11 pr-4 py-3 bg-brand-50 border border-transparent rounded-2xl text-[10px] uppercase font-black tracking-widest text-brand-600 focus:bg-white focus:border-brand-200 outline-none transition-all"
                 />
              </div>
@@ -143,15 +143,7 @@ const AdminLayout = () => {
               <BellIcon className="w-5 h-5" />
               <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-brand-500 rounded-full border-2 border-white"></div>
             </button>
-            <div className="flex items-center gap-3 pl-3 md:pl-0">
-               <div className="text-right hidden sm:block">
-                  <p className="text-[8px] font-black text-brand-300 uppercase tracking-widest mb-0.5">Primary Admin</p>
-                  <p className="text-[10px] font-black text-brand-600 uppercase italic tracking-tight">{user?.name}</p>
-               </div>
-               <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl border border-brand-100 overflow-hidden bg-brand-50 flex items-center justify-center font-black text-brand-400 shadow-sm text-sm">
-                 {user?.name?.charAt(0) || 'A'}
-               </div>
-            </div>
+            <UserMenu />
           </div>
         </header>
 
