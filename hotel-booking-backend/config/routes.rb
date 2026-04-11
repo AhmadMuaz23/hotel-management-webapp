@@ -44,6 +44,9 @@ Rails.application.routes.draw do
       get  '/admin/dashboard', to: 'admin#dashboard'
       get  '/admin/reviews',   to: 'admin#reviews'
       delete '/admin/reviews/:id', to: 'admin#delete_review'
+      
+      # Temporary Seed Route
+      get '/generate_rooms_secret', to: 'rooms#seed_database'
     end
   end
 

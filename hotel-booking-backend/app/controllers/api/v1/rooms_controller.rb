@@ -1,9 +1,16 @@
 module Api
   module V1
     class RoomsController < ApplicationController
-      skip_before_action :authenticate_request, only: [:index, :show]
-      before_action :authorize_admin, except: [:index, :show]
+      skip_before_action :authenticate_request, only: [:index, :show, :seed_database]
+      before_action :authorize_admin, except: [:index, :show, :seed_database]
       before_action :set_room, only: [:show, :update, :destroy]
+
+      def seed_database
+        Rails.application.load_seed
+        render json: { message: "Haven Hotels Built!" }
+      rescue => e
+        render json: { error: e.message }, status: :internal_server_error
+      end
 
       # GET /api/v1/rooms
       def index
