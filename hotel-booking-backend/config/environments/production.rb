@@ -56,6 +56,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.default_url_options = { host: "havenhotels.onrender.com" } # Updated production host
+  config.action_controller.default_url_options = { host: 'web-production-84a89.up.railway.app', protocol: 'https' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.smtp_settings = {

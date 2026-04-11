@@ -23,7 +23,9 @@ class User < ApplicationRecord
 
   def avatar_url
     if avatar.attached?
-      Rails.application.routes.url_helpers.rails_blob_url(avatar, host: 'http://localhost:3000')
+      host = Rails.env.production? ? 'web-production-84a89.up.railway.app' : 'localhost:3000'
+      protocol = Rails.env.production? ? 'https' : 'http'
+      Rails.application.routes.url_helpers.rails_blob_url(avatar, host: host, protocol: protocol)
     else
       nil
     end
