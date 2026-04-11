@@ -310,6 +310,16 @@ const UserDashboard = () => {
                       </div>
                     </div>
 
+                    {booking.status === 'approved' && (
+                      <button 
+                        onClick={() => setReviewingBooking(booking)}
+                        className="px-6 py-4 bg-brand-50 text-brand-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-brand-600 hover:text-white transition-all duration-300 active:scale-95 border border-brand-100 flex items-center gap-2 group"
+                      >
+                        <StarIcon className="h-4 w-4 group-hover:rotate-12 transition-transform" />
+                        Rate Sanctuary
+                      </button>
+                    )}
+
                   </motion.div>
                 ))}
               </div>
