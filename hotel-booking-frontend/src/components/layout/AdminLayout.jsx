@@ -15,6 +15,7 @@ import {
   EnvelopeIcon
 } from '@heroicons/react/24/outline';
 import UserMenu from './UserMenu';
+import { useAuth } from '../../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AdminLayout = () => {
