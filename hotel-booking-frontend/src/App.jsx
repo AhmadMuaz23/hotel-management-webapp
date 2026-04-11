@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Home from './pages/public/Home';
 import About from './pages/public/About';
@@ -25,50 +25,62 @@ import Footer from './components/layout/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 
+const AppContent = () => {
+  const location = useLocation();
+  
+  // Define paths where footer should be hidden
+  const hideFooterPaths = ['/login', '/register', '/admin/login'];
+  const shouldHideFooter = hideFooterPaths.includes(location.pathname);
+
+  return (
+    <div className="min-h-screen flex flex-col bg-slate-50">
+      <ScrollToTop />
+      <Navbar />
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/rooms" element={<Rooms />} />
+          <Route path="/rooms/:id" element={<RoomDetail />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <UserDashboard />
+            </ProtectedRoute>
+          } />
+
+          {/* Admin Routes */}
+          <Route path="/admin" element={
+            <ProtectedRoute adminOnly={true}>
+              <AdminLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<AdminOverview />} />
+            <Route path="bookings" element={<ManageBookings />} />
+            <Route path="rooms" element={<ManageRooms />} />
+            <Route path="users" element={<ManageUsers />} />
+            <Route path="messages" element={<ManageMessages />} />
+            <Route path="reviews" element={<ManageReviews />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Route>
+        </Routes>
+      </main>
+      {!shouldHideFooter && <Footer />}
+    </div>
+  );
+};
+
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen flex flex-col bg-slate-50">
-          <ScrollToTop />
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/rooms" element={<Rooms />} />
-              <Route path="/rooms/:id" element={<RoomDetail />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/verify-email" element={<VerifyEmail />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password/:token" element={<ResetPassword />} />
-              <Route path="/profile" element={
-                <ProtectedRoute>
-                  <UserDashboard />
-                </ProtectedRoute>
-              } />
-
-              {/* Admin Routes */}
-              <Route path="/admin" element={
-                <ProtectedRoute adminOnly={true}>
-                  <AdminLayout />
-                </ProtectedRoute>
-              }>
-                <Route index element={<AdminOverview />} />
-                <Route path="bookings" element={<ManageBookings />} />
-                <Route path="rooms" element={<ManageRooms />} />
-                <Route path="users" element={<ManageUsers />} />
-                <Route path="messages" element={<ManageMessages />} />
-                <Route path="reviews" element={<ManageReviews />} />
-                <Route path="settings" element={<AdminSettings />} />
-              </Route>
-            </Routes>
-          </main>
-          <Footer />
-        </div>
+        <AppContent />
       </Router>
     </AuthProvider>
   );
