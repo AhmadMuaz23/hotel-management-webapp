@@ -20,7 +20,12 @@ module Api
           )
           
           # Send email
-          UserMailer.password_reset_code(user).deliver_now
+          begin
+            UserMailer.password_reset_code(user).deliver_now
+          rescue => e
+            Rails.logger.error "Password Reset Email Failure: #{e.message}"
+            # We continue so the user isn't blocked by mailer issues in production/dev
+          end
           
           render json: { 
             message: 'If the email exists, a recovery code will be sent.',
