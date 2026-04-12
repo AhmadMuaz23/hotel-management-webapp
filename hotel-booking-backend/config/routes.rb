@@ -38,7 +38,11 @@ Rails.application.routes.draw do
       end
       
       # Contact Inquiries
-      resources :contact_messages, only: [:index, :create, :destroy]
+      resources :contact_messages, only: [:index, :create, :destroy] do
+        member do
+          put :resolve
+        end
+      end
       
       post '/admin/login',     to: 'admin#login'
       get  '/admin/dashboard', to: 'admin#dashboard'

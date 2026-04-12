@@ -17,7 +17,18 @@ module Api
       # GET /api/v1/contact_messages
       def index
         messages = ContactMessage.order(created_at: :desc)
+        messages = messages.where(status: params[:status]) if params[:status].present?
         render json: messages, status: :ok
+      end
+
+      # PUT /api/v1/contact_messages/:id/resolve
+      def resolve
+        message = ContactMessage.find(params[:id])
+        if message.update(status: 'resolved')
+          render json: message
+        else
+          render json: { errors: message.errors.full_messages }, status: :unprocessable_entity
+        end
       end
 
       # DELETE /api/v1/contact_messages/:id

@@ -7,7 +7,8 @@ import {
   ChatBubbleLeftEllipsisIcon,
   UserIcon,
   EnvelopeOpenIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 
 const ManageMessages = () => {
@@ -15,6 +16,7 @@ const ManageMessages = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMessage, setSelectedMessage] = useState(null);
+  const [statusFilter, setStatusFilter] = useState('active'); // 'active' or 'resolved'
 
   useEffect(() => {
     fetchMessages();
@@ -31,6 +33,19 @@ const ManageMessages = () => {
     }
   };
 
+  const resolveMessage = async (id) => {
+    try {
+      await api.put(`/contact_messages/${id}/resolve`);
+      setMessages(messages.map(m => m.id === id ? { ...m, status: 'resolved' } : m));
+      // Optionally deselect if filtering
+      if (statusFilter === 'active') {
+        setSelectedMessage(null);
+      }
+    } catch (err) {
+      alert('Failed to resolve inquiry');
+    }
+  };
+
   const deleteMessage = async (id) => {
     if (!window.confirm('Are you sure you want to delete this inquiry?')) return;
     try {
@@ -42,11 +57,18 @@ const ManageMessages = () => {
     }
   };
 
-  const filteredMessages = messages.filter(m => 
-    m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    m.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    m.subject.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredMessages = messages.filter(m => {
+    const matchesSearch = 
+      m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.subject.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    if (statusFilter === 'active') {
+      return matchesSearch && m.status !== 'resolved';
+    } else {
+      return matchesSearch && m.status === 'resolved';
+    }
+  });
 
   if (loading) return (
     <div className="flex items-center justify-center h-[60vh]">
@@ -62,15 +84,32 @@ const ManageMessages = () => {
           <p className="text-sm font-bold text-brand-400 italic">Manage and respond to guest messages.</p>
         </div>
 
-        <div className="relative max-w-xs w-full">
-          <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-300" />
-          <input 
-            type="text" 
-            placeholder="Search messages..."
-            className="w-full bg-white border border-brand-100 rounded-2xl py-3 pl-12 pr-4 text-xs font-bold text-brand-600 outline-none focus:ring-4 focus:ring-brand-400/10 transition-all"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="flex items-center gap-4">
+          <div className="flex bg-white p-1 rounded-2xl border border-brand-100 shadow-sm">
+            <button 
+              onClick={() => setStatusFilter('active')}
+              className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${statusFilter === 'active' ? 'bg-brand-600 text-white shadow-lg shadow-brand-200' : 'text-brand-300 hover:text-brand-600'}`}
+            >
+              Active
+            </button>
+            <button 
+              onClick={() => setStatusFilter('resolved')}
+              className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${statusFilter === 'resolved' ? 'bg-brand-600 text-white shadow-lg shadow-brand-200' : 'text-brand-300 hover:text-brand-600'}`}
+            >
+              Resolved
+            </button>
+          </div>
+
+          <div className="relative max-w-xs w-full">
+            <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-300" />
+            <input 
+              type="text" 
+              placeholder="Search landscape..."
+              className="w-full bg-white border border-brand-100 rounded-2xl py-3 pl-12 pr-4 text-xs font-bold text-brand-600 outline-none focus:ring-4 focus:ring-brand-400/10 transition-all font-black uppercase tracking-widest"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
@@ -124,12 +163,25 @@ const ManageMessages = () => {
                         <h2 className="text-2xl font-black text-brand-600 uppercase tracking-tight italic">From: {selectedMessage.name}</h2>
                       </div>
                     </div>
-                    <button 
-                      onClick={() => deleteMessage(selectedMessage.id)}
-                      className="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                       {selectedMessage.status !== 'resolved' && (
+                         <button 
+                           onClick={() => resolveMessage(selectedMessage.id)}
+                           className="flex items-center gap-2 px-5 py-3 bg-green-50 text-green-600 rounded-xl hover:bg-green-500 hover:text-white transition-all shadow-sm font-black text-[9px] uppercase tracking-widest"
+                           title="Close Inquiry"
+                         >
+                            <CheckCircleIcon className="h-5 w-5" />
+                            Close Inquiry
+                         </button>
+                       )}
+                       <button 
+                        onClick={() => deleteMessage(selectedMessage.id)}
+                        className="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
+                        title="Delete Permanently"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-brand-50">
