@@ -26,6 +26,14 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef(null);
+  
+  // Identity and Security States
+  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
+  const [isPassModalOpen, setIsPassModalOpen] = useState(false);
+  const [newName, setNewName] = useState(user?.name || '');
+  const [passData, setPassData] = useState({ current_password: '', password: '', password_confirmation: '' });
+  const [uiMsg, setUiMsg] = useState({ type: '', text: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAvatarUpload = async (e) => {
     const file = e.target.files[0];
@@ -131,6 +139,40 @@ const UserDashboard = () => {
     setEditingReview(review);
     setReviewData({ rating: review.rating, comment: review.comment });
     setReviewingBooking({ room: review.room });
+  };
+
+  const handleNameUpdate = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setUiMsg({ type: '', text: '' });
+    try {
+      const res = await api.put(`/users/${user.id}`, { name: newName });
+      setUser(res.data);
+      setUiMsg({ type: 'success', text: 'Identity updated successfully.' });
+      setTimeout(() => { setIsNameModalOpen(false); setUiMsg({ type: '', text: '' }); }, 1500);
+    } catch (err) {
+      setUiMsg({ type: 'error', text: err.response?.data?.errors?.[0] || 'Update failed' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePasswordUpdate = async (e) => {
+    e.preventDefault();
+    if (passData.password !== passData.password_confirmation) {
+      return setUiMsg({ type: 'error', text: 'Secret keys do not match.' });
+    }
+    setIsSubmitting(true);
+    try {
+      await api.put(`/users/${user.id}`, passData);
+      setUiMsg({ type: 'success', text: 'Secret key updated successfully.' });
+      setPassData({ current_password: '', password: '', password_confirmation: '' });
+      setTimeout(() => { setIsPassModalOpen(false); setUiMsg({ type: '', text: '' }); }, 1500);
+    } catch (err) {
+      setUiMsg({ type: 'error', text: err.response?.data?.errors?.[0] || 'Update failed' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getStatusColor = (status) => {
@@ -491,12 +533,18 @@ const UserDashboard = () => {
                 <p className="text-[10px] font-black text-brand-300 uppercase tracking-widest mt-1">Sanctuary Resident</p>
                 
                 <div className="mt-8 space-y-2">
-                  <button className="w-full py-4 px-6 bg-brand-50 hover:bg-brand-100 rounded-[1.5rem] border border-brand-100/50 flex items-center gap-4 text-brand-600 transition-all group">
+                  <button 
+                    onClick={() => setIsNameModalOpen(true)}
+                    className="w-full py-4 px-6 bg-brand-50 hover:bg-brand-100 rounded-[1.5rem] border border-brand-100/50 flex items-center gap-4 text-brand-600 transition-all group"
+                  >
                     <UserIcon className="h-5 w-5 opacity-50" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] group-hover:tracking-[0.25em] transition-all">Update Identity</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] group-hover:tracking-[0.25em] transition-all">Update Username</span>
                   </button>
 
-                  <button className="w-full py-4 px-6 bg-brand-50 hover:bg-brand-100 rounded-[1.5rem] border border-brand-100/50 flex items-center gap-4 text-brand-600 transition-all group">
+                  <button 
+                    onClick={() => setIsPassModalOpen(true)}
+                    className="w-full py-4 px-6 bg-brand-50 hover:bg-brand-100 rounded-[1.5rem] border border-brand-100/50 flex items-center gap-4 text-brand-600 transition-all group"
+                  >
                     <KeyIcon className="h-5 w-5 opacity-50" />
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] group-hover:tracking-[0.25em] transition-all">Change Secret Key</span>
                   </button>
@@ -528,6 +576,66 @@ const UserDashboard = () => {
 
         </div>
       </div>
+      
+      {/* Identity Update Modal */}
+      <AnimatePresence>
+        {isNameModalOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[60] bg-brand-600/40 backdrop-blur-md flex items-center justify-center p-4">
+             <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} className="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative">
+                <button onClick={() => setIsNameModalOpen(false)} className="absolute top-8 right-8 text-brand-300 hover:text-brand-600 font-bold uppercase text-[10px] tracking-widest">Close</button>
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl font-black text-brand-600 uppercase tracking-tight italic">Update Username</h3>
+                </div>
+                <form onSubmit={handleNameUpdate} className="space-y-6">
+                  {uiMsg.text && (
+                    <div className={`p-4 rounded-xl text-[9px] font-black uppercase tracking-widest text-center ${uiMsg.type === 'success' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>{uiMsg.text}</div>
+                  )}
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black text-brand-300 uppercase tracking-widest ml-4">New Resident Name</label>
+                    <input type="text" value={newName} onChange={e => setNewName(e.target.value)} className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-4 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-black text-sm text-brand-600 uppercase" required />
+                  </div>
+                  <button type="submit" disabled={isSubmitting} className="w-full bg-brand-600 text-white h-14 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
+                    {isSubmitting ? 'Updating...' : 'Save Username'}
+                  </button>
+                </form>
+             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Secret Key Update Modal */}
+      <AnimatePresence>
+        {isPassModalOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[60] bg-brand-600/40 backdrop-blur-md flex items-center justify-center p-4">
+             <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} className="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative">
+                <button onClick={() => setIsPassModalOpen(false)} className="absolute top-8 right-8 text-brand-300 hover:text-brand-600 font-bold uppercase text-[10px] tracking-widest">Close</button>
+                <div className="text-center mb-8">
+                   <h3 className="text-2xl font-black text-brand-600 uppercase tracking-tight italic">Update Secret Key</h3>
+                </div>
+                <form onSubmit={handlePasswordUpdate} className="space-y-4">
+                  {uiMsg.text && (
+                    <div className={`p-4 rounded-xl text-[9px] font-black uppercase tracking-widest text-center ${uiMsg.type === 'success' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>{uiMsg.text}</div>
+                  )}
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black text-brand-300 uppercase tracking-widest ml-4">Current Key</label>
+                    <input type="password" value={passData.current_password} onChange={e => setPassData({...passData, current_password: e.target.value})} className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-4 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-black text-sm" required />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black text-brand-300 uppercase tracking-widest ml-4">New Secret Key</label>
+                    <input type="password" value={passData.password} onChange={e => setPassData({...passData, password: e.target.value})} className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-4 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-black text-sm" required />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-black text-brand-300 uppercase tracking-widest ml-4">Confirm New Key</label>
+                    <input type="password" value={passData.password_confirmation} onChange={e => setPassData({...passData, password_confirmation: e.target.value})} className="w-full bg-brand-50 border border-brand-100 rounded-2xl p-4 outline-none focus:ring-4 focus:ring-brand-400/10 transition font-black text-sm" required />
+                  </div>
+                  <button type="submit" disabled={isSubmitting} className="w-full bg-brand-600 text-white h-14 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all mt-4">
+                    {isSubmitting ? 'Safeguarding...' : 'Update Security'}
+                  </button>
+                </form>
+             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
