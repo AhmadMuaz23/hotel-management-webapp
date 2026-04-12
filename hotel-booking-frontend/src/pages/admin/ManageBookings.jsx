@@ -59,11 +59,11 @@ const ManageBookings = () => {
       className="space-y-10"
     >
       <div className="space-y-2">
-         <h1 className="text-4xl font-black text-brand-600 tracking-tighter uppercase leading-none italic">Manage Bookings</h1>
+         <h1 className="text-3xl md:text-4xl font-black text-brand-600 tracking-tighter uppercase leading-none italic">Manage Bookings</h1>
          <p className="text-brand-300 font-bold italic text-xs uppercase tracking-widest">Maintain the sanctuary occupancy and reservation flow.</p>
       </div>
 
-      <div className="bg-white rounded-[3rem] overflow-hidden shadow-xl shadow-brand-500/5 border border-brand-50">
+      <div className="bg-white/80 backdrop-blur-xl rounded-[3rem] overflow-hidden shadow-xl shadow-brand-500/5 border border-white/50">
         <div className="overflow-x-auto">
           <table className="w-full text-left min-w-[900px]">
              <thead>

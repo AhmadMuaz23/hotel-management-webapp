@@ -72,15 +72,15 @@ export default function AdminSettings() {
     >
       {/* Header section */}
       <div className="space-y-2">
-        <h1 className="text-4xl font-black text-brand-600 tracking-tighter uppercase leading-none italic">System Settings</h1>
+        <h1 className="text-3xl md:text-4xl font-black text-brand-600 tracking-tighter uppercase leading-none italic">System Settings</h1>
         <p className="text-brand-300 font-bold italic text-xs uppercase tracking-widest">Update your admin credentials and session options.</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">
         
         {/* Change Password Section */}
-        <div className="bg-white p-8 rounded-[3rem] shadow-2xl shadow-brand-500/5 border border-brand-50 relative overflow-hidden group">
-          <div className="absolute -right-10 -top-10 text-brand-50 opacity-50 group-hover:scale-110 transition-transform duration-700">
+        <div className="bg-white/80 backdrop-blur-xl p-8 rounded-[3rem] shadow-2xl shadow-brand-500/5 border border-white/50 relative overflow-hidden group">
+          <div className="absolute -right-10 -top-10 text-brand-100 opacity-20 group-hover:scale-110 transition-transform duration-700">
             <KeyIcon className="w-64 h-64" />
           </div>
           
@@ -158,7 +158,7 @@ export default function AdminSettings() {
 
         {/* Session Options Section */}
         <div className="space-y-8">
-          <div className="bg-white p-8 rounded-[3rem] shadow-2xl shadow-brand-500/5 border border-red-50 relative overflow-hidden group hover:border-red-100 transition-all">
+          <div className="bg-white/80 backdrop-blur-xl p-8 rounded-[3rem] shadow-2xl shadow-brand-500/5 border border-white/50 relative overflow-hidden group hover:border-red-100 transition-all">
             <div className="absolute -right-6 -bottom-6 text-red-50 opacity-50 group-hover:scale-110 transition-transform duration-700">
                <ArrowRightOnRectangleIcon className="w-48 h-48" />
             </div>

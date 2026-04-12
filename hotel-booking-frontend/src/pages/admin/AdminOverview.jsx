@@ -91,10 +91,10 @@ const AdminOverview = () => {
         {/* Recent Bookings */}
         <motion.div 
           variants={itemVariants}
-          className="xl:col-span-2 bg-white rounded-[3rem] shadow-xl shadow-brand-500/5 border border-brand-50 overflow-hidden"
+          className="xl:col-span-2 bg-white/80 backdrop-blur-xl rounded-[3rem] shadow-xl shadow-brand-500/5 border border-white/50 overflow-hidden"
         >
-          <div className="px-8 md:px-10 py-8 border-b border-brand-50 flex items-center justify-between">
-            <h2 className="text-xl font-black text-brand-600 uppercase tracking-tighter">Recent Reservations</h2>
+          <div className="px-8 md:px-10 py-10 border-b border-brand-50 flex items-center justify-between">
+            <h2 className="text-2xl md:text-3xl font-black text-brand-600 uppercase tracking-tighter">Recent Reservations</h2>
             <div className="h-1 w-12 bg-brand-200 rounded-full" />
           </div>
           <div className="overflow-x-auto">
@@ -148,10 +148,10 @@ const AdminOverview = () => {
         {/* Recent Users */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white rounded-[3rem] shadow-xl shadow-brand-500/5 border border-brand-50 overflow-hidden h-fit"
+          className="bg-white/80 backdrop-blur-xl rounded-[3rem] shadow-xl shadow-brand-500/5 border border-white/50 overflow-hidden h-fit"
         >
-          <div className="px-8 py-8 border-b border-brand-50">
-            <h2 className="text-xl font-black text-brand-600 uppercase tracking-tighter">New Arrivals</h2>
+          <div className="px-8 py-10 border-b border-brand-50">
+            <h2 className="text-2xl md:text-3xl font-black text-brand-600 uppercase tracking-tighter">New Arrivals</h2>
           </div>
           <div className="divide-y divide-brand-50/50">
             {recent_users?.length > 0 ? recent_users.map((u) => (
@@ -183,7 +183,7 @@ const StatCard = ({ title, value, icon, delay }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay }}
-    className="bg-white rounded-[2.5rem] p-8 shadow-xl shadow-brand-500/5 border border-brand-50 relative overflow-hidden group hover:shadow-2xl hover:shadow-brand-500/10 transition-all duration-500"
+    className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-xl shadow-brand-500/5 border border-white/50 relative overflow-hidden group hover:shadow-2xl hover:shadow-brand-500/10 transition-all duration-500"
   >
     <div className="relative z-10 space-y-4">
       <div className="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition-all duration-500 shadow-sm">

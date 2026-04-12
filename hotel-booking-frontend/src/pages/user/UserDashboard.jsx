@@ -250,8 +250,8 @@ const UserDashboard = () => {
             transition={{ delay: 0.4 }}
             className="lg:col-span-2 space-y-6"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-3xl font-display font-black text-brand-600 underline decoration-brand-200 decoration-8 underline-offset-8">Recent Stays</h2>
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl md:text-3xl font-black text-brand-600 tracking-tight leading-tight uppercase underline decoration-brand-200 decoration-4 underline-offset-8">Recent Stays</h2>
               <p className="text-[10px] font-black text-brand-500 uppercase tracking-widest bg-brand-100 px-3 py-1 rounded-full">Record History</p>
             </div>
 
@@ -330,7 +330,7 @@ const UserDashboard = () => {
             {/* User Reviews Section - Moved to Left Column for better readability */}
             <div className="bg-white/70 backdrop-blur-md border border-brand-100 rounded-[2.5rem] p-10 shadow-xl shadow-brand-500/5 mt-10">
               <div className="flex items-center justify-between mb-8">
-                <h3 className="text-2xl font-display font-black text-brand-600 tracking-tight leading-tight uppercase underline decoration-brand-200 decoration-4 underline-offset-8">Your Haven Insights</h3>
+                <h3 className="text-2xl md:text-3xl font-black text-brand-600 tracking-tight leading-tight uppercase underline decoration-brand-200 decoration-4 underline-offset-8">Your Haven Insights</h3>
                 <p className="text-[10px] font-black text-brand-300 uppercase tracking-widest">{userReviews.length} Shared Experiences</p>
               </div>
               

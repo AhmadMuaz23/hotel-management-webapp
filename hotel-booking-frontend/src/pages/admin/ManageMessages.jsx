@@ -80,7 +80,7 @@ const ManageMessages = () => {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-1">
-          <h1 className="text-3xl font-black text-brand-600 tracking-tight uppercase">User Inquiries</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-brand-600 tracking-tighter uppercase leading-none italic">User Inquiries</h1>
           <p className="text-sm font-bold text-brand-400 italic">Manage and respond to guest messages.</p>
         </div>
 
@@ -117,7 +117,7 @@ const ManageMessages = () => {
         {/* Messages List */}
         <div className="lg:col-span-1 space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
           {filteredMessages.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-3xl border border-dashed border-brand-200">
+            <div className="text-center py-12 bg-white/50 backdrop-blur-md rounded-3xl border border-dashed border-brand-200">
               <p className="text-xs font-bold text-brand-300 uppercase italic">No inquiries found.</p>
             </div>
           ) : filteredMessages.map(msg => (
@@ -125,7 +125,7 @@ const ManageMessages = () => {
               key={msg.id}
               onClick={() => setSelectedMessage(msg)}
               whileHover={{ x: 4 }}
-              className={`p-6 bg-white border ${selectedMessage?.id === msg.id ? 'border-brand-600 ring-2 ring-brand-600/5' : 'border-brand-100'} rounded-3xl cursor-pointer transition-all shadow-sm group`}
+              className={`p-6 bg-white/80 backdrop-blur-xl border ${selectedMessage?.id === msg.id ? 'border-brand-600 ring-4 ring-brand-600/5' : 'border-white/50'} rounded-3xl cursor-pointer transition-all shadow-sm group`}
             >
               <div className="flex justify-between items-start mb-3">
                 <div className="space-y-1">
@@ -148,7 +148,7 @@ const ManageMessages = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="bg-white border border-brand-100 rounded-[3rem] p-10 lg:p-12 shadow-xl shadow-brand-500/5 h-full relative overflow-hidden"
+                className="bg-white/80 backdrop-blur-xl border border-white/50 rounded-[3rem] p-10 lg:p-12 shadow-xl shadow-brand-500/5 h-full relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-brand-50 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
                 
