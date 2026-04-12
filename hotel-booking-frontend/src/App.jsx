@@ -28,14 +28,16 @@ import ScrollToTop from './components/ScrollToTop';
 const AppContent = () => {
   const location = useLocation();
   
-  // Define paths where footer should be hidden
+  // Define paths where navbar/footer should be hidden
+  const isAdminPath = location.pathname.startsWith('/admin');
   const hideFooterPaths = ['/login', '/register', '/admin/login'];
-  const shouldHideFooter = hideFooterPaths.includes(location.pathname);
+  const shouldHideFooter = hideFooterPaths.includes(location.pathname) || isAdminPath;
+  const shouldHideNavbar = isAdminPath && location.pathname !== '/admin/login';
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <ScrollToTop />
-      <Navbar />
+      {!shouldHideNavbar && <Navbar />}
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
