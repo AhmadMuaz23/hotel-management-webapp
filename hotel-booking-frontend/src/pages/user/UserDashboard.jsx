@@ -74,14 +74,16 @@ const UserDashboard = () => {
   useEffect(() => {
     fetchBookings();
     fetchUserReviews();
-    
-    // Check for settings deep link
+  }, []);
+
+  // Monitor URL parameters for deep linking
+  useEffect(() => {
     if (searchParams.get('settings') === 'identity') {
       setIsNameModalOpen(true);
       // Clear the param after opening to prevent re-open on refresh or navigation
       setSearchParams({}, { replace: true });
     }
-  }, []);
+  }, [searchParams]);
 
   const fetchBookings = async () => {
     try {
