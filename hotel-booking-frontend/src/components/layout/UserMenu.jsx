@@ -44,7 +44,7 @@ const UserMenu = () => {
     },
     { 
       name: 'Identity Settings', 
-      path: user.role === 'admin' ? '/admin/settings' : '/profile', 
+      path: user.role === 'admin' ? '/admin/settings' : '/profile?settings=identity', 
       icon: <Cog6ToothIcon className="w-4 h-4" /> 
     },
   ];

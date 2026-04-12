@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CalendarIcon, 
@@ -26,6 +27,7 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const fileInputRef = useRef(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   
   // Identity and Security States
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
@@ -72,6 +74,13 @@ const UserDashboard = () => {
   useEffect(() => {
     fetchBookings();
     fetchUserReviews();
+    
+    // Check for settings deep link
+    if (searchParams.get('settings') === 'identity') {
+      setIsNameModalOpen(true);
+      // Clear the param after opening to prevent re-open on refresh or navigation
+      setSearchParams({}, { replace: true });
+    }
   }, []);
 
   const fetchBookings = async () => {
