@@ -9,4 +9,10 @@ class UserMailer < ApplicationMailer
     @code = user.verification_code
     mail to: user.email, subject: "Verify your HavenHotels Account"
   end
+
+  def password_reset_code(user)
+    @user = user
+    @code = user.reset_password_token
+    mail to: user.email, subject: "Sanctuary Access: Your Recovery Code"
+  end
 end

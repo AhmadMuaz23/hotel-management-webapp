@@ -12,22 +12,23 @@ module Api
         user = User.find_by(email: params[:email])
 
         if user
-          # Generate token
-          token = SecureRandom.urlsafe_base64(32)
+          # Generate 6-digit numeric code
+          code = sprintf('%06d', rand(10**6))
           user.update!(
-            reset_password_token: token,
+            reset_password_token: code,
             reset_password_sent_at: Time.current
           )
           
-          # In a real app, send email here.
-          # For development, we return token in response so user can test.
+          # Send email
+          UserMailer.password_reset_code(user).deliver_now
+          
           render json: { 
-            message: 'If the email exists, a reset link will be sent.',
-            debug_token: token # REMOVE IN PRODUCTION
+            message: 'If the email exists, a recovery code will be sent.',
+            debug_code: code # REMOVE IN PRODUCTION
           }, status: :ok
         else
           # Still return OK for security (prevent email discovery)
-          render json: { message: 'If the email exists, a reset link will be sent.' }, status: :ok
+          render json: { message: 'If the email exists, a recovery code will be sent.' }, status: :ok
         end
       end
 
