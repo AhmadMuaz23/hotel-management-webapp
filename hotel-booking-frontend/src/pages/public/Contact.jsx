@@ -64,7 +64,7 @@ const Contact = () => {
       <section className="relative h-[50vh] flex items-center justify-center pt-20">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1920&q=80" 
+            src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1280&q=70" 
             alt="Hotel Lobby" 
             className="w-full h-full object-cover brightness-[0.7]"
           />

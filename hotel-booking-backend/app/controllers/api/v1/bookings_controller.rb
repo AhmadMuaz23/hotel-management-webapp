@@ -7,6 +7,7 @@ module Api
       # GET /api/v1/bookings
       # Admin sees all, users see their own
       def index
+        Booking.sync_all_statuses!
         if @current_user.admin?
           bookings = Booking.all.order(created_at: :desc)
         else
@@ -17,6 +18,7 @@ module Api
 
       # GET /api/v1/bookings/1
       def show
+        @booking.sync_status!
         if @current_user.admin? || @booking.user_id == @current_user.id
           render json: @booking.as_json(include: :room)
         else
@@ -76,7 +78,7 @@ module Api
       # PATCH/PUT /api/v1/bookings/1/approve
       def approve
         if @booking.update(status: 'approved')
-          @booking.room.update(status: 'booked')
+          @booking.room.sync_status!
           render json: @booking
         else
           render json: { errors: @booking.errors.full_messages }, status: :unprocessable_entity
@@ -92,7 +94,7 @@ module Api
             if old_status == 'pending' || old_status == 'approved'
               @booking.user.update!(balance: @booking.user.balance + @booking.total_price)
             end
-            @booking.room.update(status: 'available')
+            @booking.room.sync_status!
             render json: @booking
           else
             render json: { errors: @booking.errors.full_messages }, status: :unprocessable_entity

@@ -19,10 +19,10 @@ import 'swiper/css/pagination';
 
 /* ─── Category images (fallback per category) ──────────────── */
 const categoryImages = {
-  presidential: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=80',
-  couple:       'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=900&q=80',
-  single:       'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=900&q=80',
-  family:       'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80',
+  presidential: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=600&q=70',
+  couple:       'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=70',
+  single:       'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=70',
+  family:       'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=70',
 };
 
 const categoryLabels = {
@@ -41,18 +41,9 @@ const Home = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const res = await api.get('/rooms');
-        const rooms = res.data;
-        // Pick one room per category for variety
-        const seen = {};
-        const picked = [];
-        for (const room of rooms) {
-          if (!seen[room.category]) {
-            seen[room.category] = true;
-            picked.push(room);
-          }
-        }
-        setFeaturedRooms(picked.length > 0 ? picked : rooms.slice(0, 4));
+        // Optimization: Fetch only featured rooms with a limit from backend
+        const res = await api.get('/rooms', { params: { is_featured: true, limit: 6 } });
+        setFeaturedRooms(res.data);
       } catch (err) {
         console.error('Failed to fetch rooms:', err);
       }
@@ -67,7 +58,7 @@ const Home = () => {
       <section className="relative min-h-[600px] md:h-screen flex items-center py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=80"
+            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1280&q=75"
             alt="Warm Interior"
             className="w-full h-full object-cover brightness-[0.85] scale-110"
           />
@@ -222,7 +213,7 @@ const Home = () => {
           <div className="relative rounded-[4rem] overflow-hidden">
             <div className="absolute inset-0 z-0">
               <img
-                src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1920&q=80"
+                src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1280&q=70"
                 alt="Spa"
                 className="w-full h-full object-cover grayscale opacity-30"
               />

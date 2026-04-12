@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import UserMenu from './UserMenu';
+import SmartAvatar from '../ui/Avatar';
 import { 
   Bars3Icon, 
   XMarkIcon,
@@ -161,9 +162,12 @@ const Navbar = () => {
                 {user ? (
                   <div className="space-y-8">
                     <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 bg-brand-200 rounded-2xl flex items-center justify-center text-brand-600 font-black text-2xl shadow-inner">
-                        {user.name.charAt(0)}
-                      </div>
+                     <SmartAvatar 
+                       src={user.avatar_url} 
+                       name={user.name} 
+                       size="14" 
+                       className="rounded-2xl shadow-inner"
+                     />
                       <div>
                         <p className="text-[10px] text-brand-300 font-black uppercase tracking-[0.3em]">
                           {user.role === 'admin' ? 'Administrator' : 'Guest'}

@@ -2,7 +2,7 @@ class Booking < ApplicationRecord
   belongs_to :user
   belongs_to :room
 
-  enum :status, { pending: 0, approved: 1, cancelled: 2 }
+  enum :status, { pending: 0, approved: 1, cancelled: 2, completed: 3 }
 
   validates :check_in, :check_out, presence: true
   validates :guests, presence: true, numericality: { greater_than: 0 }
@@ -10,6 +10,19 @@ class Booking < ApplicationRecord
   
   validate :check_out_after_check_in
   validate :no_overlapping_bookings, on: :create
+
+  def self.sync_all_statuses!
+    where(status: :approved).find_each(&:sync_status!)
+  end
+
+  def sync_status!
+    return unless approved?
+    
+    if Date.current >= check_out
+      update_column(:status, :completed)
+      room.sync_status! # Room should also be synced when booking completes
+    end
+  end
 
   private
 

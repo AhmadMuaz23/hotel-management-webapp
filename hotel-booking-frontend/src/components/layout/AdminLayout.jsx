@@ -9,7 +9,6 @@ import {
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   MagnifyingGlassIcon,
-  BellIcon,
   Bars3Icon,
   XMarkIcon,
   EnvelopeIcon
@@ -140,10 +139,6 @@ const AdminLayout = () => {
           </div>
           
           <div className="flex items-center gap-3 md:gap-8">
-            <button className="hidden sm:flex text-brand-300 hover:text-brand-600 transition relative p-2 bg-brand-50 rounded-xl">
-              <BellIcon className="w-5 h-5" />
-              <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-brand-500 rounded-full border-2 border-white"></div>
-            </button>
             <UserMenu />
           </div>
         </header>

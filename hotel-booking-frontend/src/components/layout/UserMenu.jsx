@@ -9,6 +9,7 @@ import {
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '../../contexts/AuthContext';
+import SmartAvatar from '../ui/Avatar';
 
 const UserMenu = () => {
   const { user, logout } = useAuth();
@@ -55,13 +56,12 @@ const UserMenu = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-3 p-1.5 pr-4 rounded-2xl hover:bg-brand-100 transition-all duration-300 group"
       >
-        <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-brand-500 overflow-hidden shadow-lg shadow-brand-200/50 flex items-center justify-center border-2 border-transparent group-hover:border-white transition-all">
-          {user.avatar_url ? (
-            <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-white font-black text-lg">{user.name.charAt(0)}</span>
-          )}
-        </div>
+        <SmartAvatar 
+          src={user.avatar_url} 
+          name={user.name} 
+          size="11" 
+          className="rounded-xl overflow-hidden shadow-lg shadow-brand-200/50 border-2 border-transparent group-hover:border-white transition-all"
+        />
         
         <div className="text-left hidden sm:block">
           <p className="text-[10px] font-black text-brand-300 uppercase tracking-[0.2em] mb-0.5 flex items-center gap-1">
@@ -86,9 +86,12 @@ const UserMenu = () => {
           >
             {/* Header Info */}
             <div className="p-4 mb-2 bg-brand-50 rounded-[1.5rem] flex items-center gap-4 border border-brand-100/50">
-               <div className="w-12 h-12 rounded-xl bg-brand-100 flex items-center justify-center text-brand-500 font-black text-xl">
-                 {user.name.charAt(0)}
-               </div>
+                <SmartAvatar 
+                  src={user.avatar_url} 
+                  name={user.name} 
+                  size="12" 
+                  className="rounded-xl"
+                />
                <div>
                   <p className="text-[11px] font-black text-brand-600 uppercase tracking-tight truncate w-32">{user.name}</p>
                   <p className="text-[9px] font-bold text-brand-300 uppercase tracking-widest">{user.email}</p>

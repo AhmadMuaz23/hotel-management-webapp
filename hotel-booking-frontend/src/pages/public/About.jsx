@@ -54,7 +54,7 @@ const About = () => {
           >
             <div className="relative rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
               <img 
-                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80" 
+                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=75" 
                 alt="Our Tradition" 
                 className="w-full aspect-[4/3] object-cover"
               />

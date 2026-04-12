@@ -17,6 +17,7 @@ import { StarIcon } from '@heroicons/react/24/solid';
 import api from '../../services/api';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import SmartAvatar from '../../components/ui/Avatar';
 
 const UserDashboard = () => {
   const { user, setUser } = useAuth();
@@ -135,6 +136,7 @@ const UserDashboard = () => {
   const getStatusColor = (status) => {
     switch(status.toLowerCase()) {
       case 'approved': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+      case 'completed': return 'bg-blue-100 text-blue-700 border-blue-200';
       case 'cancelled': return 'bg-red-100 text-red-700 border-red-200';
       default: return 'bg-amber-100 text-amber-700 border-amber-200';
     }
@@ -452,10 +454,13 @@ const UserDashboard = () => {
                   >
                     {uploadingAvatar ? (
                       <div className="w-6 h-6 border-2 border-brand-200 border-t-brand-500 rounded-full animate-spin"></div>
-                    ) : user?.avatar_url ? (
-                      <img src={user.avatar_url} alt="Profile Avatar" className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                     ) : (
-                      <UserIcon className="h-10 w-10 opacity-40 group-hover:scale-110 transition-transform" />
+                      <SmartAvatar 
+                        src={user?.avatar_url} 
+                        name={user?.name} 
+                        size="20" 
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                      />
                     )}
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                       <span className="text-white text-[8px] font-black uppercase tracking-widest text-center mt-6">Upload</span>

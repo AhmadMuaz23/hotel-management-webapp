@@ -14,16 +14,21 @@ module Api
 
       # GET /api/v1/rooms
       def index
+        Room.sync_all_statuses!
         rooms = Room.all
         rooms = rooms.where(category: params[:category]) if params[:category].present?
         rooms = rooms.where('price_per_night <= ?', params[:max_price]) if params[:max_price].present?
         rooms = rooms.where('capacity >= ?', params[:guests]) if params[:guests].present?
+        rooms = rooms.where(is_featured: params[:is_featured]) if params[:is_featured].present?
+        
+        rooms = rooms.limit(params[:limit]) if params[:limit].present?
         
         render json: rooms
       end
 
       # GET /api/v1/rooms/1
       def show
+        @room.sync_status!
         render json: @room.as_json(methods: :average_rating, include: { reviews: { include: { user: { only: :name } } } })
       end
 

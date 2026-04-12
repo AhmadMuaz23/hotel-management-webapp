@@ -99,13 +99,14 @@ const ManageBookings = () => {
                      <td className="px-6 py-6">
                         <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm ${
                            booking.status === 'approved' ? 'bg-green-50 text-green-600 border border-green-100 italic' :
+                           booking.status === 'completed' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100 italic' :
                            booking.status === 'cancelled' ? 'bg-red-50 text-red-600 border border-red-100 italic' : 'bg-orange-50 text-orange-600 border border-orange-100 italic'
                         }`}>
                            {booking.status}
                         </span>
                      </td>
                      <td className="px-8 py-6 text-right">
-                        <div className="flex items-center justify-end gap-2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                        <div className="flex items-center justify-end gap-2 transition-all">
                           {booking.status === 'pending' && (
                             <>
                               <button 
@@ -124,6 +125,17 @@ const ManageBookings = () => {
                               </button>
                             </>
                           )}
+                          
+                          {booking.status === 'approved' && (
+                            <button 
+                              onClick={() => updateStatus(booking.id, 'cancel')} 
+                              className="bg-red-50 text-red-500 p-2.5 rounded-xl hover:bg-red-600 hover:text-white transition-all hover:scale-110 active:scale-95 shadow-lg shadow-red-50 border border-red-100"
+                              title="Cancel & Refund Reservation"
+                            >
+                              <XCircleIcon className="w-4 h-4" />
+                            </button>
+                          )}
+
                           {booking.status === 'cancelled' ? (
                               <button 
                                 onClick={() => deleteBooking(booking.id)} 
@@ -133,9 +145,11 @@ const ManageBookings = () => {
                                 <TrashIcon className="w-4 h-4" />
                               </button>
                           ) : (
-                              <div className="p-2.5 text-brand-100 cursor-not-allowed">
-                                <EllipsisHorizontalIcon className="w-4 h-4" />
-                              </div>
+                              (booking.status !== 'approved' && booking.status !== 'pending') && (
+                                <div className="p-2.5 text-brand-100 cursor-not-allowed">
+                                  <EllipsisHorizontalIcon className="w-4 h-4" />
+                                </div>
+                              )
                           )}
                         </div>
                      </td>
@@ -150,4 +164,3 @@ const ManageBookings = () => {
 };
 
 export default ManageBookings;
-

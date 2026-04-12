@@ -196,12 +196,12 @@ const Rooms = () => {
 
 const RoomCard = ({ room, index }) => {
   const roomImages = [
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1590490359683-658d3d23f972?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=800&q=80"
+    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=600&q=65",
+    "https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=600&q=65",
+    "https://images.unsplash.com/photo-1590490359683-658d3d23f972?auto=format&fit=crop&w=600&q=65",
+    "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=65",
+    "https://images.unsplash.com/photo-1595576508898-0ad5c879a061?auto=format&fit=crop&w=600&q=65",
+    "https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=600&q=65"
   ];
 
   return (
@@ -216,6 +216,7 @@ const RoomCard = ({ room, index }) => {
         <img 
           src={roomImages[room.id % 6]} 
           alt={room.name} 
+          loading="lazy"
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]" 
         />
         {/* Soft gradient overlay */}
@@ -232,6 +233,7 @@ const RoomCard = ({ room, index }) => {
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-brand-600/10 backdrop-blur-[2px]">
            <Link 
             to={`/rooms/${room.id}`}
+            state={{ room }}
             className="bg-white text-brand-600 px-10 py-4 rounded-full font-black text-[10px] uppercase tracking-[0.3em] shadow-2xl hover:bg-brand-600 hover:text-white transition-all transform hover:scale-105"
            >
              Book Suite
@@ -266,7 +268,7 @@ const RoomCard = ({ room, index }) => {
         </p>
 
         <div className="pt-2 flex items-center justify-between">
-           <Link to={`/rooms/${room.id}`} className="flex items-center gap-2 group/link cursor-pointer">
+           <Link to={`/rooms/${room.id}`} state={{ room }} className="flex items-center gap-2 group/link cursor-pointer">
               <span className="text-[10px] font-black text-brand-400 uppercase tracking-widest group-hover/link:text-brand-600 transition-colors">Details</span>
               <ArrowsRightLeftIcon className="h-4 w-4 text-brand-200 group-hover/link:text-brand-600 transition-colors" />
            </Link>

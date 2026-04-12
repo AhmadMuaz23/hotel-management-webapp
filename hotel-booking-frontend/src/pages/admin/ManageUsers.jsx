@@ -50,7 +50,7 @@ export default function ManageUsers() {
   };
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = (user.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || (user.email || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (user.name || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === 'all' || user.role === filterRole || (filterRole === 'guest' && user.role !== 'admin');
     return matchesSearch && matchesRole;
   });
