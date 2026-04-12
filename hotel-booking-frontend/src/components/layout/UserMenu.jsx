@@ -92,9 +92,9 @@ const UserMenu = () => {
                   size="12" 
                   className="rounded-xl"
                 />
-               <div>
-                  <p className="text-[11px] font-black text-brand-600 uppercase tracking-tight truncate w-32">{user.name}</p>
-                  <p className="text-[9px] font-bold text-brand-300 uppercase tracking-widest">{user.email}</p>
+               <div className="min-w-0 pr-2">
+                  <p className="text-[11px] font-black text-brand-600 uppercase tracking-tight truncate">{user.name}</p>
+                  <p className="text-[9px] font-bold text-brand-300 uppercase tracking-widest truncate">{user.email}</p>
                </div>
             </div>
 

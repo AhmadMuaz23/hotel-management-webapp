@@ -120,7 +120,7 @@ const AdminLayout = () => {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Top Header */}
-        <header className="h-20 bg-white border-b border-brand-100 flex items-center justify-between px-4 md:px-10 flex-shrink-0 relative z-10">
+        <header className="h-20 bg-white border-b border-brand-100 flex items-center justify-between px-4 md:px-10 flex-shrink-0 relative z-30">
           <div className="flex items-center gap-4">
              <button 
               onClick={() => setIsSidebarOpen(true)}
