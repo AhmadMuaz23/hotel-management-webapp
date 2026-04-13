@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Squares2X2Icon, 
@@ -11,7 +11,9 @@ import {
   MagnifyingGlassIcon,
   Bars3Icon,
   XMarkIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  CalendarDaysIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 import UserMenu from './UserMenu';
 import { useAuth } from '../../contexts/AuthContext';
@@ -22,6 +24,12 @@ const AdminLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -128,13 +136,16 @@ const AdminLayout = () => {
              >
                 <Bars3Icon className="w-6 h-6" />
              </button>
-             <div className="hidden md:relative md:block w-72 lg:w-96">
-                <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-300" />
-                <input 
-                  type="text" 
-                  placeholder="Scan sanctuary logs..." 
-                  className="w-full pl-11 pr-4 py-3 bg-brand-50 border border-transparent rounded-2xl text-[10px] uppercase font-black tracking-widest text-brand-600 focus:bg-white focus:border-brand-200 outline-none transition-all"
-                />
+             <div className="hidden md:flex items-center gap-6 px-6 py-2.5 bg-brand-50 rounded-2xl border border-brand-100/50 text-brand-600 shadow-sm">
+                <div className="flex items-center gap-2">
+                  <CalendarDaysIcon className="w-4 h-4 opacity-50" />
+                  <span className="text-[10px] font-black uppercase tracking-widest">{time.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+                <div className="h-4 w-px bg-brand-200/50"></div>
+                <div className="flex items-center gap-2">
+                  <ClockIcon className="w-4 h-4 opacity-50" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em]">{time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
              </div>
           </div>
           
