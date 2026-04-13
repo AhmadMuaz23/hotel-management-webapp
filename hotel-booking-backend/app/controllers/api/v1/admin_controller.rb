@@ -51,8 +51,13 @@ module Api
             pending_reviews: pending_reviews,
             total_revenue: revenue
           },
-          recent_bookings: recent_bookings.as_json(include: [:user, :room]),
-          recent_users: recent_users.as_json(except: [:password_digest])
+          recent_bookings: recent_bookings.as_json(
+            include: {
+              room: {},
+              user: { methods: [:avatar_url] }
+            }
+          ),
+          recent_users: recent_users.as_json(except: [:password_digest], methods: [:avatar_url])
         }
       end
       # GET /api/v1/admin/reviews
@@ -60,7 +65,7 @@ module Api
         reviews = Review.includes(:user, :room).order(created_at: :desc)
         render json: reviews.as_json(
           include: {
-            user: { only: [:id, :name, :email] },
+            user: { only: [:id, :name, :email], methods: [:avatar_url] },
             room: { only: [:id, :name] }
           }
         )
