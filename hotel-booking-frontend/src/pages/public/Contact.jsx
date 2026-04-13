@@ -165,11 +165,17 @@ const Contact = () => {
                 </select>
               </div>
 
-              <div className="space-y-3">
-                <label className="text-[10px] font-black text-brand-300 uppercase tracking-widest pl-2">Your Thoughts</label>
+              <div className="space-y-3 relative">
+                <div className="flex justify-between items-end">
+                  <label className="text-[10px] font-black text-brand-300 uppercase tracking-widest pl-2">Your Thoughts</label>
+                  <span className={`text-[9px] font-black uppercase tracking-widest pr-2 ${formData.message.length >= 500 ? 'text-red-400' : 'text-brand-300'}`}>
+                    {formData.message.length}/500
+                  </span>
+                </div>
                 <textarea 
                   required
-                  rows="5"
+                  rows="3"
+                  maxLength={500}
                   placeholder="How can we make your stay extraordinary?"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
