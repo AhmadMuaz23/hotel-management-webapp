@@ -32,6 +32,7 @@ const UserDashboard = () => {
   // Identity and Security States
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [isPassModalOpen, setIsPassModalOpen] = useState(false);
+  const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false);
   const [newName, setNewName] = useState(user?.name || '');
   const [passData, setPassData] = useState({ current_password: '', password: '', password_confirmation: '' });
   const [uiMsg, setUiMsg] = useState({ type: '', text: '' });
@@ -502,7 +503,7 @@ const UserDashboard = () => {
               <div className="h-24 bg-brand-600 relative">
                 <div className="absolute -bottom-10 left-1/2 -translate-x-1/2">
                   <div 
-                    onClick={() => fileInputRef.current?.click()}
+                    onClick={() => setIsAvatarMenuOpen(true)}
                     className="w-20 h-20 rounded-full border-4 border-white bg-brand-50 flex items-center justify-center text-brand-600 shadow-xl overflow-hidden group cursor-pointer relative"
                   >
                     {uploadingAvatar ? (
@@ -516,7 +517,7 @@ const UserDashboard = () => {
                       />
                     )}
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                      <span className="text-white text-[8px] font-black uppercase tracking-widest text-center mt-6">Upload</span>
+                      <span className="text-white text-[8px] font-black uppercase tracking-widest text-center mt-6">Options</span>
                     </div>
                   </div>
                   <input 
@@ -526,15 +527,6 @@ const UserDashboard = () => {
                     accept="image/*" 
                     className="hidden" 
                   />
-                  {user?.avatar_url && (
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); handleAvatarRemove(); }}
-                      className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors z-10"
-                      title="Remove Identity Image"
-                    >
-                      <XMarkIcon className="w-4 h-4" />
-                    </button>
-                  )}
                 </div>
               </div>
 
@@ -588,6 +580,36 @@ const UserDashboard = () => {
         </div>
       </div>
       
+      {/* Avatar Options Modal */}
+      <AnimatePresence>
+        {isAvatarMenuOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[60] bg-brand-600/40 backdrop-blur-md flex items-center justify-center p-4">
+             <motion.div initial={{ scale: 0.9, y: 30 }} animate={{ scale: 1, y: 0 }} className="bg-white w-full max-w-xs rounded-[3rem] p-10 shadow-2xl relative text-center border-2 border-brand-100">
+                <button onClick={() => setIsAvatarMenuOpen(false)} className="absolute top-8 right-8 text-brand-300 hover:text-brand-600 font-bold uppercase text-[10px] tracking-widest">Close</button>
+                <div className="mb-8 mt-2">
+                  <h3 className="text-xl font-black text-brand-600 uppercase tracking-tight italic">Identity Image</h3>
+                </div>
+                <div className="space-y-4">
+                  <button 
+                    onClick={() => { setIsAvatarMenuOpen(false); fileInputRef.current?.click(); }}
+                    className="w-full py-4 px-6 bg-brand-600 text-white hover:bg-brand-500 rounded-[1.5rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-brand-600/20 active:scale-95 transition-all"
+                  >
+                    Upload New Image
+                  </button>
+                  {user?.avatar_url && (
+                    <button 
+                      onClick={() => { setIsAvatarMenuOpen(false); handleAvatarRemove(); }}
+                      className="w-full py-4 px-6 bg-red-50 text-red-600 hover:bg-red-500 hover:text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-sm transition-colors border border-red-100/50"
+                    >
+                      Erase Image
+                    </button>
+                  )}
+                </div>
+             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Identity Update Modal */}
       <AnimatePresence>
         {isNameModalOpen && (
