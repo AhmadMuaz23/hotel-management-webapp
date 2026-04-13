@@ -8,6 +8,7 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
+import SmartAvatar from '../../components/ui/Avatar';
 
 const AdminOverview = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -112,9 +113,12 @@ const AdminOverview = () => {
                   <tr key={booking.id} className="hover:bg-brand-50/30 transition-colors group">
                     <td className="px-10 py-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-2xl bg-brand-50 flex items-center justify-center font-black text-brand-600 text-xs italic shadow-sm group-hover:bg-brand-600 group-hover:text-white transition-all">
-                          {booking.user?.name?.charAt(0) || 'G'}
-                        </div>
+                        <SmartAvatar 
+                          src={booking.user?.avatar_url} 
+                          name={booking.user?.name || 'Guest'} 
+                          size="10" 
+                          className="group-hover:ring-2 ring-brand-300 transition-all shadow-sm"
+                        />
                         <div>
                           <p className="font-black text-sm text-brand-600 uppercase tracking-tight">{booking.user?.name || 'Guest'}</p>
                           <p className="text-[10px] font-bold text-brand-300">{booking.room?.name || 'Sanctuary Unit'}</p>
@@ -157,9 +161,12 @@ const AdminOverview = () => {
             {recent_users?.length > 0 ? recent_users.map((u) => (
               <div key={u.id} className="px-8 py-6 flex items-center justify-between hover:bg-brand-50/30 transition-all group cursor-pointer">
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-full bg-brand-50 flex items-center justify-center font-black text-brand-400 border border-brand-100 group-hover:bg-brand-600 group-hover:text-white group-hover:scale-110 transition-all shadow-sm">
-                    {u.name?.charAt(0) || 'U'}
-                  </div>
+                  <SmartAvatar 
+                    src={u.avatar_url} 
+                    name={u.name} 
+                    size="11" 
+                    className="group-hover:scale-110 transition-transform shadow-sm"
+                  />
                   <div>
                     <h3 className="font-black text-sm text-brand-600 uppercase tracking-tight">{u.name}</h3>
                     <p className="text-[10px] font-bold text-brand-300 italic">{u.email}</p>
