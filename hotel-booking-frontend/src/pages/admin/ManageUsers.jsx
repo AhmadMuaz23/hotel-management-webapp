@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { MagnifyingGlassIcon, TrashIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import api from '../../services/api';
 import { motion } from 'framer-motion';
+import SmartAvatar from '../../components/ui/Avatar';
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
@@ -126,9 +127,12 @@ export default function ManageUsers() {
                   <tr key={user.id} className="hover:bg-brand-50/30 transition-all group">
                     <td className="px-10 py-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-2xl bg-brand-50 flex items-center justify-center font-black text-brand-600 text-xs italic shadow-sm group-hover:bg-brand-600 group-hover:text-white transition-all">
-                          {user.name?.charAt(0) || 'U'}
-                        </div>
+                        <SmartAvatar 
+                          src={user.avatar_url} 
+                          name={user.name} 
+                          size="10" 
+                          className="group-hover:ring-2 ring-brand-300 transition-all shadow-sm"
+                        />
                         <div>
                           <p className="font-black text-sm text-brand-600 uppercase tracking-tight leading-none">{user.name}</p>
                           <p className="text-[10px] font-bold text-brand-300 italic mt-1">{user.email}</p>
