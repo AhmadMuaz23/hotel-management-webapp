@@ -19,7 +19,10 @@ const ForgotPassword = () => {
     setMessage({ type: '', text: '' });
     try {
       const response = await api.post('/passwords/forgot', { email });
-      setMessage({ type: 'success', text: response.data.message });
+      const msgText = response.data.debug_code 
+        ? `${response.data.message} [AUTO-SYSTEM CODE: ${response.data.debug_code}]` 
+        : response.data.message;
+      setMessage({ type: 'success', text: msgText });
       setStep('reset');
     } catch (err) {
       setMessage({ type: 'error', text: err.response?.data?.errors?.[0] || 'Something went wrong' });
