@@ -96,7 +96,7 @@ export default function ManageRooms() {
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2">
-          <h1 className="text-4xl font-black text-brand-600 tracking-tighter uppercase leading-none italic">Manage Sanctuaries</h1>
+          <h1 className="text-4xl font-black text-brand-600 tracking-tighter uppercase leading-none italic">Manage Rooms</h1>
           <p className="text-brand-300 font-bold italic text-xs uppercase tracking-widest">Architect and refine the hotel collection.</p>
         </div>
         <button 
@@ -104,7 +104,7 @@ export default function ManageRooms() {
           className="flex items-center justify-center gap-3 bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] transition-all shadow-xl shadow-brand-200 active:scale-95"
         >
           <PlusIcon className="w-4 h-4" />
-          Add Sanctuary
+          Add Room
         </button>
       </div>
 
@@ -126,12 +126,12 @@ export default function ManageRooms() {
           <table className="w-full text-left border-collapse min-w-[1000px]">
             <thead>
               <tr className="bg-brand-50/30 text-brand-300 text-[10px] font-black uppercase tracking-widest border-b border-brand-50">
-                <th className="px-10 py-6">Sanctuary Details</th>
+                <th className="px-10 py-6">Room Details</th>
                 <th className="px-6 py-6 text-center">Category</th>
                 <th className="px-6 py-6 text-center">Identity</th>
                 <th className="px-6 py-6 text-center">Availability</th>
                 <th className="px-6 py-6 text-center">Capacity</th>
-                <th className="px-10 py-6 text-right">sanctuary control</th>
+                <th className="px-10 py-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-50/50 font-bold text-brand-500">
@@ -176,10 +176,10 @@ export default function ManageRooms() {
                     </td>
                     <td className="px-10 py-6 text-right">
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-                        <button onClick={() => handleOpenModal(room)} className="p-2.5 text-brand-300 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-all hover:scale-110" title="Edit Properties">
+                        <button onClick={() => handleOpenModal(room)} className="p-2.5 text-brand-300 hover:text-brand-600 hover:bg-brand-50 rounded-xl transition-all hover:scale-110" title="Edit Room">
                           <PencilSquareIcon className="w-5 h-5" />
                         </button>
-                        <button onClick={() => handleDelete(room.id)} className="p-2.5 text-brand-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all hover:scale-110" title="Erase Sanctuary">
+                        <button onClick={() => handleDelete(room.id)} className="p-2.5 text-brand-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all hover:scale-110" title="Delete Room">
                           <TrashIcon className="w-5 h-5" />
                         </button>
                       </div>
@@ -210,7 +210,7 @@ export default function ManageRooms() {
               className="bg-white rounded-[3rem] p-8 md:p-12 w-full max-w-2xl shadow-2xl relative z-20 overflow-y-auto max-h-[90vh]"
             >
               <div className="flex justify-between items-center mb-10">
-                <h2 className="text-3xl font-black text-brand-600 uppercase tracking-tighter italic leading-none">{editingRoom ? 'Evolve Unit' : 'Create Sanctuary'}</h2>
+                <h2 className="text-3xl font-black text-brand-600 uppercase tracking-tighter italic leading-none">{editingRoom ? 'Edit Room' : 'Create Room'}</h2>
                 <button onClick={() => setIsModalOpen(false)} className="text-brand-300 hover:text-brand-600 bg-brand-50 p-2.5 rounded-full transition-colors active:scale-90">
                   <XMarkIcon className="w-6 h-6" />
                 </button>
@@ -227,7 +227,7 @@ export default function ManageRooms() {
                     <textarea required className="w-full bg-brand-50 border border-transparent px-5 py-4 rounded-2xl font-bold text-xs italic text-brand-500 min-h-[120px] focus:bg-white focus:border-brand-200 outline-none transition-all leading-relaxed" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
                   </div>
                   <div className="space-y-2">
-                    <label className="block text-[9px] font-black text-brand-300 uppercase tracking-widest ml-1 italic">Sanctuary Category</label>
+                    <label className="block text-[9px] font-black text-brand-300 uppercase tracking-widest ml-1 italic">Room Category</label>
                     <select className="w-full bg-brand-50 border border-transparent px-5 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest text-brand-600 focus:bg-white focus:border-brand-200 outline-none transition-all cursor-pointer" value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})}>
                       <option value="single_room">Single Retreat</option>
                       <option value="couple_room">Couple Haven</option>
@@ -258,9 +258,9 @@ export default function ManageRooms() {
                 </div>
 
                 <div className="pt-10 border-t border-brand-50 flex flex-col sm:flex-row justify-end gap-4">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="px-10 py-5 bg-brand-50 hover:bg-brand-100 font-black text-[10px] uppercase tracking-[0.3em] text-brand-400 rounded-2xl transition-all">Relinquish</button>
+                  <button type="button" onClick={() => setIsModalOpen(false)} className="px-10 py-5 bg-brand-50 hover:bg-brand-100 font-black text-[10px] uppercase tracking-[0.3em] text-brand-400 rounded-2xl transition-all">Close</button>
                   <button type="submit" className="px-10 py-5 bg-brand-600 hover:bg-brand-500 font-black text-[10px] uppercase tracking-[0.3em] text-white rounded-2xl transition-all shadow-xl shadow-brand-200 active:scale-95">
-                    {editingRoom ? 'Evolve Unit' : 'Authorize Sanctuary'}
+                    {editingRoom ? 'Save Changes' : 'Create Room'}
                   </button>
                 </div>
               </form>
