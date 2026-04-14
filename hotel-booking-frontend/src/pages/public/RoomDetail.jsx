@@ -212,26 +212,26 @@ const RoomDetail = () => {
                       transition={{ delay: i * 0.1 }}
                       className="bg-white p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border border-brand-50 shadow-xl shadow-brand-500/5 space-y-6"
                     >
-                       <div className="flex flex-wrap items-center justify-between gap-x-12 gap-y-4">
-                          <div className="flex items-center gap-3">
-                             <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-brand-100 flex items-center justify-center font-black text-brand-600 text-[10px] italic">
-                                {rev.user?.name?.charAt(0) || 'G'}
-                             </div>
-                             <span className="font-black text-brand-600 text-sm md:text-base uppercase tracking-tight">{rev.user?.name || 'Guest'}</span>
-                          </div>
-                          <div className="flex gap-1 md:gap-1.5">
-                            {[...Array(5)].map((_, starIdx) => {
-                              const isActive = starIdx < rev.rating;
-                              const Icon = isActive ? StarIcon : StarOutline;
-                              return (
-                                <Icon 
-                                  key={starIdx} 
-                                  className={`h-4 w-4 md:h-5 md:w-5 transition-colors ${isActive ? 'text-brand-400 drop-shadow-sm' : 'text-brand-300 opacity-60'}`} 
-                                />
-                              );
-                            })}
-                          </div>
-                       </div>
+                       <div className="flex items-center gap-4 md:gap-6">
+                           <div className="flex items-center gap-2.5">
+                              <div className="w-7 h-7 md:w-9 md:h-9 rounded-full bg-brand-100 flex items-center justify-center font-black text-brand-600 text-[9px] italic">
+                                 {rev.user?.name?.charAt(0) || 'G'}
+                              </div>
+                              <span className="font-black text-brand-600 text-[11px] md:text-xs uppercase tracking-tight">{rev.user?.name || 'Guest'}</span>
+                           </div>
+                           <div className="flex gap-1 md:gap-1.5 pt-0.5">
+                             {[...Array(5)].map((_, starIdx) => {
+                               const isActive = starIdx < rev.rating;
+                               const Icon = isActive ? StarIcon : StarOutline;
+                               return (
+                                 <Icon 
+                                   key={starIdx} 
+                                   className={`h-3.5 w-3.5 md:h-[18px] md:w-[18px] transition-colors ${isActive ? 'text-brand-400' : 'text-brand-300 opacity-60'}`} 
+                                 />
+                               );
+                             })}
+                           </div>
+                        </div>
                        <p className="text-brand-500/80 font-bold text-base md:text-lg leading-relaxed italic">"{rev.comment}"</p>
                     </motion.div>
                   ))}
