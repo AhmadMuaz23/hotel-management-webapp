@@ -413,7 +413,7 @@ const UserDashboard = () => {
                         <p className="text-xs font-black text-brand-600 uppercase tracking-wider">{rev.room?.name}</p>
                         <div className="flex gap-1 text-brand-400">
                           {[...Array(5)].map((_, i) => (
-                            <StarIcon key={i} className={`h-3 w-3 ${i < rev.rating ? 'text-brand-400' : 'text-brand-100'}`} />
+                            <StarIcon key={i} className={`h-4 w-4 ${i < rev.rating ? 'text-brand-400' : 'text-brand-100'}`} />
                           ))}
                         </div>
                       </div>

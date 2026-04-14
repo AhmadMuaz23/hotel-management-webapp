@@ -219,20 +219,20 @@ const RoomDetail = () => {
                              </div>
                              <span className="font-black text-brand-600 text-sm md:text-base uppercase tracking-tight">{rev.user?.name || 'Guest'}</span>
                           </div>
-                          <div className="flex gap-1.5 md:gap-2">
+                          <div className="flex gap-1 md:gap-1.5">
                             {[...Array(5)].map((_, starIdx) => {
                               const isActive = starIdx < rev.rating;
                               const Icon = isActive ? StarIcon : StarOutline;
                               return (
                                 <Icon 
                                   key={starIdx} 
-                                  className={`h-6 w-6 md:h-8 md:w-8 transition-colors ${isActive ? 'text-brand-400 drop-shadow-sm' : 'text-brand-300 opacity-60'}`} 
+                                  className={`h-4 w-4 md:h-5 md:w-5 transition-colors ${isActive ? 'text-brand-400 drop-shadow-sm' : 'text-brand-300 opacity-60'}`} 
                                 />
                               );
                             })}
                           </div>
                        </div>
-                       <p className="text-brand-500/80 font-bold text-lg md:text-xl leading-relaxed italic">"{rev.comment}"</p>
+                       <p className="text-brand-500/80 font-bold text-base md:text-lg leading-relaxed italic">"{rev.comment}"</p>
                     </motion.div>
                   ))}
                </div>
