@@ -15,7 +15,7 @@ class JsonWebToken
 
   # Encode with user role included for role-based JWT validation
   def self.encode_with_role(user)
-    exp = user.role == 'admin' ? 2.hours.from_now : 24.hours.from_now
+    exp = user.role == 'admin' ? 2.hours.from_now : 2.hours.from_now
     encode({ user_id: user.id, role: user.role }, exp)
   end
 end
