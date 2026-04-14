@@ -334,8 +334,8 @@ const UserDashboard = () => {
                       />
                     </div>
                     
-                    <div className="flex-grow text-center sm:text-left">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                    <div className="flex-grow text-center sm:text-left space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <h4 className="text-xl font-display font-bold text-brand-600 leading-tight">
                           {booking.room?.name || 'Haven Suite'}
                         </h4>
@@ -344,6 +344,15 @@ const UserDashboard = () => {
                         </span>
                       </div>
                       
+                      {booking.status === 'cancelled' && booking.rejection_reason && (
+                        <div className="bg-red-50 border border-red-100 rounded-2xl p-4 flex items-center gap-3">
+                          <InformationCircleIcon className="h-5 w-5 text-red-400 shrink-0" />
+                          <p className="text-[10px] font-black text-red-600 uppercase tracking-widest text-left">
+                            {booking.rejection_reason}
+                          </p>
+                        </div>
+                      )}
+
                       <div className="grid grid-cols-2 gap-6 mt-4">
                         <div className="flex items-center gap-3 text-brand-600">
                           <div className="p-2 bg-brand-50 rounded-xl">

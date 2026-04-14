@@ -77,12 +77,32 @@ module Api
 
       # PATCH/PUT /api/v1/bookings/1/approve
       def approve
-        if @booking.update(status: 'approved')
-          @booking.room.sync_status!
-          render json: @booking
-        else
-          render json: { errors: @booking.errors.full_messages }, status: :unprocessable_entity
+        Booking.transaction do
+          if @booking.update(status: 'approved')
+            # Handle simultaneous pending bookings for the same room and dates
+            overlapping_pending = Booking.where(room_id: @booking.room_id)
+                                         .where(status: :pending)
+                                         .where.not(id: @booking.id)
+                                         .where('check_in < ? AND check_out > ?', @booking.check_out, @booking.check_in)
+
+            overlapping_pending.find_each do |other_booking|
+              other_booking.update!(
+                status: :cancelled,
+                rejection_reason: "Sorry this room is already booked you can book another room"
+              )
+              # Refund the user
+              other_booking.user.update!(balance: other_booking.user.balance + other_booking.total_price)
+            end
+
+            @booking.room.sync_status!
+            render json: @booking
+          else
+            render json: { errors: @booking.errors.full_messages }, status: :unprocessable_entity
+            raise ActiveRecord::Rollback
+          end
         end
+      rescue StandardError => e
+        render json: { errors: [e.message] }, status: :internal_server_error
       end
 
       # PATCH/PUT /api/v1/bookings/1/cancel

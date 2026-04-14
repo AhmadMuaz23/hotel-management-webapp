@@ -217,18 +217,22 @@ const RoomDetail = () => {
                              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-brand-100 flex items-center justify-center font-black text-brand-600 text-[10px] italic">
                                 {rev.user?.name?.charAt(0) || 'G'}
                              </div>
-                             <span className="font-black text-brand-600 text-xs md:text-sm uppercase tracking-tight">{rev.user?.name || 'Guest'}</span>
+                             <span className="font-black text-brand-600 text-sm md:text-base uppercase tracking-tight">{rev.user?.name || 'Guest'}</span>
                           </div>
-                          <div className="flex gap-0.5">
-                            {[...Array(5)].map((_, starIdx) => (
-                              <StarIcon 
-                                key={starIdx} 
-                                className={`h-2.5 w-2.5 md:h-3 md:w-3 ${starIdx < rev.rating ? 'text-brand-400' : 'text-brand-100'}`} 
-                              />
-                            ))}
+                          <div className="flex gap-1.5 md:gap-2">
+                            {[...Array(5)].map((_, starIdx) => {
+                              const isActive = starIdx < rev.rating;
+                              const Icon = isActive ? StarIcon : StarOutline;
+                              return (
+                                <Icon 
+                                  key={starIdx} 
+                                  className={`h-6 w-6 md:h-8 md:w-8 transition-colors ${isActive ? 'text-brand-400 drop-shadow-sm' : 'text-brand-300 opacity-60'}`} 
+                                />
+                              );
+                            })}
                           </div>
                        </div>
-                       <p className="text-brand-500/70 font-bold text-xs md:text-sm leading-relaxed italic">"{rev.comment}"</p>
+                       <p className="text-brand-500/80 font-bold text-lg md:text-xl leading-relaxed italic">"{rev.comment}"</p>
                     </motion.div>
                   ))}
                </div>

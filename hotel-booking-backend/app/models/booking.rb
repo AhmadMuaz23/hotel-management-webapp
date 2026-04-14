@@ -37,13 +37,15 @@ class Booking < ApplicationRecord
   def no_overlapping_bookings
     return if check_in.blank? || check_out.blank? || room_id.blank?
 
+    # Only block if there's an already APPROVED or COMPLETED booking for these dates.
+    # We allow multiple PENDING bookings to be created for same dates.
     overlapping_bookings = Booking.where(room_id: room_id)
                                   .where.not(id: id)
-                                  .where.not(status: :cancelled)
+                                  .where(status: [:approved, :completed])
                                   .where('check_in < ? AND check_out > ?', check_out, check_in)
 
     if overlapping_bookings.exists?
-      errors.add(:base, "This room is already booked for the selected dates")
+      errors.add(:base, "This room is already confirmed booked for the selected dates")
     end
   end
 end
