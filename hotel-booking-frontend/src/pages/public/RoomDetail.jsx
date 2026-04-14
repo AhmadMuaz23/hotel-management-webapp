@@ -212,7 +212,7 @@ const RoomDetail = () => {
                       transition={{ delay: i * 0.1 }}
                       className="bg-white p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border border-brand-50 shadow-xl shadow-brand-500/5 space-y-6"
                     >
-                       <div className="flex justify-between items-center">
+                       <div className="flex flex-wrap items-center justify-between gap-x-12 gap-y-4">
                           <div className="flex items-center gap-3">
                              <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-brand-100 flex items-center justify-center font-black text-brand-600 text-[10px] italic">
                                 {rev.user?.name?.charAt(0) || 'G'}
