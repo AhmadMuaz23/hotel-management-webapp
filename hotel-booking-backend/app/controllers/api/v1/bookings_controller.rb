@@ -13,7 +13,7 @@ module Api
         else
           bookings = @current_user.bookings.order(created_at: :desc)
         end
-        render json: bookings.as_json(include: :room)
+        render json: bookings.as_json(include: [:room, :user])
       end
 
       # GET /api/v1/bookings/1
