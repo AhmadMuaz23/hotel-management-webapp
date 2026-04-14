@@ -68,7 +68,7 @@ const AdminOverview = () => {
         />
         <StatCard 
           title="Available Units" 
-          value={(stats?.total_rooms || 0).toLocaleString()} 
+          value={((stats?.total_rooms || 0) - (stats?.active_bookings || 0)).toLocaleString()} 
           icon={<HomeModernIcon className="w-6 h-6" />}
           delay={0.2}
         />
