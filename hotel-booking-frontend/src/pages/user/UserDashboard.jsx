@@ -197,9 +197,9 @@ const UserDashboard = () => {
   };
 
   // Stats calculation
-  const totalBookings = bookings.length;
+  const totalBookings = bookings.filter(b => b.status !== 'cancelled').length;
   const activeReservations = bookings.filter(b => b.status === 'approved' || b.status === 'pending').length;
-  const totalSpent = bookings.reduce((sum, b) => sum + parseFloat(b.total_price || 0), 0);
+  const totalSpent = bookings.filter(b => b.status !== 'cancelled').reduce((sum, b) => sum + parseFloat(b.total_price || 0), 0);
 
   const containerVariants = {
     hidden: { opacity: 0 },
